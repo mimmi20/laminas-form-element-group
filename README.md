@@ -1,14 +1,14 @@
-# template
+# laminas-form-element-group
 
-[![Continuous Integration](https://github.com/mimmi20/template/workflows/Continuous Integration/badge.svg?branch=master)](https://github.com/mimmi20/template/actions)
-[![Close stale issues and pull requests](https://github.com/mimmi20/template/workflows/Close stale issues and pull requests/badge.svg?branch=master)](https://github.com/mimmi20/template/actions)
-[![Release](https://github.com/mimmi20/template/workflows/Release/badge.svg?branch=master)](https://github.com/mimmi20/template/actions)
-[![Renew License](https://github.com/mimmi20/template/workflows/Renew License/badge.svg?branch=master)](https://github.com/mimmi20/template/actions)
+[![Latest Stable Version](https://poser.pugx.org/mimmi20/laminas-form-element-group/v/stable?format=flat-square)](https://packagist.org/packages/mimmi20/laminas-form-element-group)
+[![Latest Unstable Version](https://poser.pugx.org/mimmi20/laminas-form-element-group/v/unstable?format=flat-square)](https://packagist.org/packages/mimmi20/laminas-form-element-group)
+[![License](https://poser.pugx.org/mimmi20/laminas-form-element-group/license?format=flat-square)](https://packagist.org/packages/mimmi20/laminas-form-element-group)
 
-[![Code Coverage](https://codecov.io/gh/mimmi20/template/branch/master/graph/badge.svg)](https://codecov.io/gh/mimmi20/template)
+## Code Status
 
-[![Latest Stable Version](https://poser.pugx.org/mimmi20/template/v/stable)](https://packagist.org/packages/mimmi20/template)
-[![Total Downloads](https://poser.pugx.org/mimmi20/template/downloads)](https://packagist.org/packages/mimmi20/template)
+[![codecov](https://codecov.io/gh/mimmi20/laminas-form-element-group/branch/master/graph/badge.svg)](https://codecov.io/gh/mimmi20/laminas-form-element-group)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mimmi20/laminas-form-element-group.svg)](http://isitmaintained.com/project/mimmi20/laminas-form-element-group "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/mimmi20/laminas-form-element-group.svg)](http://isitmaintained.com/project/mimmi20/laminas-form-element-group "Percentage of issues still open")
 
 ## Installation
 
@@ -17,7 +17,7 @@
 Run
 
 ```
-$ composer require mimmi20/template
+$ composer require mimmi20/laminas-form-element-group
 ```
 
 ## Usage
