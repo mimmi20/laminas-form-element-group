@@ -20,7 +20,7 @@
   },
   "require-dev": {
     "ext-intl": "*",
-    "infection/infection": "^0.22.0",
+    "infection/infection": "^0.22.1",
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-validator": "^2.14.4",
     "mimmi20/coding-standard": "^2.1.3",
