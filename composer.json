@@ -14,7 +14,7 @@
   "require": {
     "php": "^7.4.7 || ^8.0.0",
     "ext-mbstring": "*",
-    "laminas/laminas-form": "^2.16.3",
+    "laminas/laminas-form": "^2.17.0",
     "laminas/laminas-hydrator": "^4.1.0",
     "laminas/laminas-inputfilter": "^2.12.0"
   },
