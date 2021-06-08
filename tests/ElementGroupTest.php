@@ -559,27 +559,6 @@ final class ElementGroupTest extends TestCase
 
     /**
      * @throws InvalidArgumentException
-     * @throws DomainException
-     */
-    public function testPopulateValuesNullRaisesException(): void
-    {
-        $collection = $this->form->get('colors');
-
-        assert(
-            $collection instanceof ElementGroup,
-            sprintf(
-                '$collection should be an Instance of %s, but was %s',
-                ElementGroup::class,
-                get_class($collection)
-            )
-        );
-
-        $this->expectException(InvalidArgumentException::class);
-        $collection->populateValues(null);
-    }
-
-    /**
-     * @throws InvalidArgumentException
      */
     public function testSetTargetElementNullRaisesException(): void
     {
@@ -1242,7 +1221,7 @@ final class ElementGroupTest extends TestCase
                 $_categoryName,
                 $collection->get((string) $_k)
                     ->get('product')
-                    ->get('categories')->get(0)
+                    ->get('categories')->get('0')
                     ->get('name')->getValue()
             );
         }

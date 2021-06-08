@@ -20,8 +20,7 @@ parameters:
   ignoreErrors:
     - '~PHPDoc tag @throws with type .* is not compatible with parent~'
     - '~Parameter #2 \$haystack of static method PHPUnit\\Framework\\Assert::assertCount\(\) expects Countable\|iterable, Laminas\\Form\\ElementInterface given~'
-    - '~Parameter #1 \$var of function count expects array\|Countable, array\|Traversable given~'
     - '~Call to an undefined method Laminas\\Form\\ElementInterface::get\(\)~'
     - '~Cannot call method getObject\(\) on Laminas\\Form\\ElementInterface\|null~'
     - '~Parameter #1 \$elementOrFieldset of method Laminas\\Form\\Element\\Collection::setTargetElement\(\) expects array\|Laminas\\Form\\ElementInterface\|Traversable, null given~'
-    - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects array\|Traversable, null given~'
+    - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
