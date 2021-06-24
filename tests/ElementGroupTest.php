@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\Form\Element;
 
+use ArrayAccess;
 use ArrayObject;
 use Laminas\Form\Element;
 use Laminas\Form\Exception\DomainException;
@@ -1723,15 +1724,16 @@ final class ElementGroupTest extends TestCase
      */
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface(): void
     {
-        $form = new Form('test');
-        $text = new Element\Text('text');
+        $count = 2;
+        $form  = new Form('test');
+        $text  = new Element\Text('text');
         $form->add(
             [
                 'name' => 'text',
                 'type' => ElementGroup::class,
                 'options' => [
                     'target_element' => $text,
-                    'count' => 2,
+                    'count' => $count,
                 ],
             ]
         );
@@ -1740,13 +1742,348 @@ final class ElementGroupTest extends TestCase
         self::assertTrue($form->isValid());
 
         $result = $form->getData();
-        self::assertInstanceOf('ArrayAccess', $result);
+        self::assertInstanceOf(ArrayAccess::class, $result);
         self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
+        self::assertCount($count, $result['text']);
         self::assertArrayHasKey(0, $result['text']);
         self::assertSame('Foo', $result['text'][0]);
         self::assertArrayHasKey(1, $result['text']);
         self::assertSame('Bar', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount($count, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\Text::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     *
+     * @group issue-6263
+     * @group issue-6518
+     * @group test-3
+     */
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface2(): void
+    {
+        $count = 2;
+        $form  = new Form('test');
+        $text  = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'type' => ElementGroup::class,
+                'options' => [
+                    'target_element' => $text,
+                    'count' => $count,
+                ],
+            ]
+        );
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertArrayHasKey('text', $result);
+        self::assertIsArray($result['text']);
+        self::assertCount($count, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount($count, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     *
+     * @group issue-6263
+     * @group issue-6518
+     * @group test-3
+     */
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface3(): void
+    {
+        $count = 2;
+        $form  = new Form('test');
+        $text  = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'type' => ElementGroup::class,
+                'options' => [
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                    'count' => $count,
+                    'should_create_template' => true,
+                    'create_new_objects' => false,
+                ],
+            ]
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertArrayHasKey('text', $result);
+        self::assertIsArray($result['text']);
+        self::assertCount($count, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount($count, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     *
+     * @group issue-6263
+     * @group issue-6518
+     * @group test-4
+     */
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface4(): void
+    {
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'type' => ElementGroup::class,
+                'options' => [
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                    'count' => 0,
+                    'should_create_template' => true,
+                    'create_new_objects' => false,
+                ],
+            ]
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertArrayHasKey('text', $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     *
+     * @group issue-6263
+     * @group issue-6518
+     * @group test-3
+     */
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface5(): void
+    {
+        $form = new Form('test');
+        $form->add(
+            [
+                'name' => 'text',
+                'type' => ElementGroup::class,
+                'options' => [
+                    'template_placeholder' => 'template_counter',
+                    'count' => 2,
+                    'should_create_template' => true,
+                    'create_new_objects' => false,
+                ],
+            ]
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertArrayHasKey('text', $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(0, $result['text']);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(0, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     *
+     * @group issue-6263
+     * @group issue-6518
+     * @group test-3
+     */
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface6(): void
+    {
+        $form = new Form('test');
+        $form->add(
+            [
+                'name' => 'text',
+                'type' => ElementGroup::class,
+                'elements' => [
+                    [
+                        'spec' => [
+                            'type' => Element\Text::class,
+                            'name' => 'text',
+                        ],
+                    ],
+                    [
+                        'spec' => [
+                            'type' => Element\DateSelect::class,
+                            'name' => 'datesel',
+                        ],
+                    ],
+                    [
+                        'spec' => [
+                            'type' => Element\DateTimeSelect::class,
+                            'name' => 'datetimesel',
+                        ],
+                    ],
+                    [
+                        'spec' => [
+                            'type' => Element\Number::class,
+                            'name' => 'num',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $form->prepare();
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(4, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
     }
 
     /**
@@ -1910,8 +2247,7 @@ final class ElementGroupTest extends TestCase
             ]
         );
 
-        $collection = $form->get('fieldsets');
-        $data       = [
+        $data = [
             'fieldsets' => [
                 'red',
                 'green',
