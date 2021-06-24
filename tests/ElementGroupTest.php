@@ -1860,9 +1860,9 @@ final class ElementGroupTest extends TestCase
             ]
         );
 
-        //$form->prepare();
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
         $form->bind($object);
+        $form->prepare();
         self::assertTrue($form->isValid());
 
         $result = $form->getData();
