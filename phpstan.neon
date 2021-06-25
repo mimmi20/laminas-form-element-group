@@ -24,3 +24,4 @@ parameters:
     - '~Cannot call method getObject\(\) on Laminas\\Form\\ElementInterface\|null~'
     - '~Parameter #1 \$elementOrFieldset of method Laminas\\Form\\Element\\Collection::setTargetElement\(\) expects array\|Laminas\\Form\\ElementInterface\|Traversable, null given~'
     - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
+    - '~Instanceof between null and Laminas\\Form\\FieldsetInterface will always evaluate to false~'
