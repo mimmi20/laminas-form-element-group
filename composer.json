@@ -22,7 +22,7 @@
     "ext-intl": "*",
     "infection/infection": "^0.23.0",
     "laminas/laminas-i18n": "^2.11.1",
-    "laminas/laminas-validator": "^2.14.4",
+    "laminas/laminas-validator": "^2.14.5",
     "mimmi20/coding-standard": "^2.2.3",
     "pepakriz/phpstan-exception-rules": "^0.11.7",
     "phpstan/extension-installer": "^1.1.0",
