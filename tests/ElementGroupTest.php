@@ -1743,7 +1743,6 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf(ArrayAccess::class, $result);
-        self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
         self::assertCount($count, $result['text']);
         self::assertArrayHasKey(0, $result['text']);
@@ -1803,7 +1802,6 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf(ArrayAccess::class, $result);
-        self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
         self::assertCount($count, $result['text']);
         self::assertArrayHasKey(0, $result['text']);
@@ -1868,7 +1866,6 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf(ArrayAccess::class, $result);
-        self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
         self::assertCount($count, $result['text']);
         self::assertArrayHasKey(0, $result['text']);
@@ -1932,7 +1929,6 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf(ArrayAccess::class, $result);
-        self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
         self::assertCount(2, $result['text']);
         self::assertArrayHasKey(0, $result['text']);
@@ -1994,7 +1990,6 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf(ArrayAccess::class, $result);
-        self::assertArrayHasKey('text', $result);
         self::assertIsArray($result['text']);
         self::assertCount(0, $result['text']);
 
