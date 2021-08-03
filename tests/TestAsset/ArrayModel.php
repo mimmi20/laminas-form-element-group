@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element\TestAsset;
+namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 final class ArrayModel
 {

@@ -10,10 +10,10 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element;
+namespace Mimmi20Test\Form\Element\Group;
 
-use Mimmi20\Form\Element\ConfigProvider;
-use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Group\ConfigProvider;
+use Mimmi20\Form\Element\Group\ElementGroup;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;

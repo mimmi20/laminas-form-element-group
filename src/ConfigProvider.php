@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20\Form\Element;
+namespace Mimmi20\Form\Element\Group;
 
 use Laminas\Form\ElementFactory;
 
@@ -20,6 +20,7 @@ final class ConfigProvider
      * Return general-purpose laminas-navigation configuration.
      *
      * @return array<string, array<string, array<string, string>>>
+     * @phpstan-return array{form_elements: array{aliases: array<string, class-string>, factories: array<class-string, class-string>}}
      */
     public function __invoke(): array
     {
@@ -32,6 +33,7 @@ final class ConfigProvider
      * Return application-level dependency configuration.
      *
      * @return array<string, array<string, string>>
+     * @phpstan-return array{aliases: array<string, class-string>, factories: array<class-string, class-string>}
      */
     public function getFormElementConfig(): array
     {

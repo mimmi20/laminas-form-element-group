@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20\Form\Element;
+namespace Mimmi20\Form\Element\Group;
 
 use Laminas\Form\Element\Collection;
 use Laminas\Form\ElementInterface;

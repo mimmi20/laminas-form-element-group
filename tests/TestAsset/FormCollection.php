@@ -10,11 +10,11 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element\TestAsset;
+namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 use Laminas\Form\Element\Color as ColorElement;
 use Laminas\Form\Form;
-use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Group\ElementGroup;
 
 final class FormCollection extends Form
 {

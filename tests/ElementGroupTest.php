@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element;
+namespace Mimmi20Test\Form\Element\Group;
 
 use ArrayAccess;
 use ArrayObject;
@@ -24,20 +24,20 @@ use Laminas\Hydrator\ArraySerializableHydrator;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\ArrayInput;
-use Mimmi20\Form\Element\ElementGroup;
-use Mimmi20Test\Form\Element\TestAsset\AddressFieldset;
-use Mimmi20Test\Form\Element\TestAsset\ArrayModel;
-use Mimmi20Test\Form\Element\TestAsset\CategoryFieldset;
-use Mimmi20Test\Form\Element\TestAsset\CustomCollection;
-use Mimmi20Test\Form\Element\TestAsset\CustomTraversable;
-use Mimmi20Test\Form\Element\TestAsset\Entity\Address;
-use Mimmi20Test\Form\Element\TestAsset\Entity\Category;
-use Mimmi20Test\Form\Element\TestAsset\Entity\Country;
-use Mimmi20Test\Form\Element\TestAsset\Entity\Phone;
-use Mimmi20Test\Form\Element\TestAsset\Entity\Product;
-use Mimmi20Test\Form\Element\TestAsset\FormCollection;
-use Mimmi20Test\Form\Element\TestAsset\PhoneFieldset;
-use Mimmi20Test\Form\Element\TestAsset\ProductFieldset;
+use Mimmi20\Form\Element\Group\ElementGroup;
+use Mimmi20Test\Form\Element\Group\TestAsset\AddressFieldset;
+use Mimmi20Test\Form\Element\Group\TestAsset\ArrayModel;
+use Mimmi20Test\Form\Element\Group\TestAsset\CategoryFieldset;
+use Mimmi20Test\Form\Element\Group\TestAsset\CustomCollection;
+use Mimmi20Test\Form\Element\Group\TestAsset\CustomTraversable;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Address;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Category;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product;
+use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection;
+use Mimmi20Test\Form\Element\Group\TestAsset\PhoneFieldset;
+use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -1158,16 +1158,16 @@ final class ElementGroupTest extends TestCase
 
             // test for collection -> fieldset
             $_productFieldset = $_shopFieldset->get('product');
-            self::assertInstanceOf('Mimmi20Test\Form\Element\TestAsset\ProductFieldset', $_productFieldset);
-            self::assertInstanceOf('Mimmi20Test\Form\Element\TestAsset\Entity\Product', $_productFieldset->getObject());
+            self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset', $_productFieldset);
+            self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product', $_productFieldset->getObject());
 
             // test for collection -> fieldset -> fieldset
             self::assertInstanceOf(
-                'Mimmi20Test\Form\Element\TestAsset\CountryFieldset',
+                'Mimmi20Test\Form\Element\Group\TestAsset\CountryFieldset',
                 $_productFieldset->get('made_in_country')
             );
             self::assertInstanceOf(
-                'Mimmi20Test\Form\Element\TestAsset\Entity\Country',
+                'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country',
                 $_productFieldset->get('made_in_country')->getObject()
             );
 
@@ -1476,7 +1476,7 @@ final class ElementGroupTest extends TestCase
                     // Each shop fieldset contain a collection with two products in it
                     self::assertCount(2, $_productfieldset->getFieldsets());
                     foreach ($_productfieldset->getFieldsets() as $_product) {
-                        self::assertInstanceOf('Mimmi20Test\Form\Element\TestAsset\Entity\Product', $_product->getObject());
+                        self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product', $_product->getObject());
                     }
                 }
             }
@@ -1548,12 +1548,12 @@ final class ElementGroupTest extends TestCase
             foreach ($_fieldset->getFieldsets() as $_childFieldsetName => $_childFieldset) {
                 switch ($_childFieldsetName) {
                     case 'city':
-                        self::assertInstanceOf('Mimmi20Test\Form\Element\TestAsset\Entity\City', $_childFieldset->getObject());
+                        self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\City', $_childFieldset->getObject());
                         break;
                     case 'phones':
                         foreach ($_childFieldset->getFieldsets() as $_phoneFieldset) {
                             self::assertInstanceOf(
-                                'Mimmi20Test\Form\Element\TestAsset\Entity\Phone',
+                                'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone',
                                 $_phoneFieldset->getObject()
                             );
                         }
