@@ -10,12 +10,12 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element\TestAsset;
+namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 use Laminas\Form\Fieldset;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\InputFilterProviderInterface;
-use Mimmi20\Form\Element\ElementGroup;
+use Mimmi20\Form\Element\Group\ElementGroup;
 
 final class ProductFieldset extends Fieldset implements InputFilterProviderInterface
 {

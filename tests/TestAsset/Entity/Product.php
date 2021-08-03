@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mimmi20Test\Form\Element\TestAsset\Entity;
+namespace Mimmi20Test\Form\Element\Group\TestAsset\Entity;
 
 use function get_object_vars;
 
