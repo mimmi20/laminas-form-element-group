@@ -12,17 +12,11 @@
 
 ## Installation
 
-:bulb: This is a great place for showing how to install the package, see below:
-
 Run
 
 ```
 $ composer require mimmi20/laminas-form-element-group
 ```
-
-## Usage
-
-:bulb: This is a great place for showing a few usage examples!
 
 ## License
 
