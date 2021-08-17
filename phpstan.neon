@@ -10,15 +10,18 @@ parameters:
     - %currentWorkingDirectory%/vendor/autoload.php
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
-  exceptionRules:
-    reportUnusedCatchesOfUncheckedExceptions: true
-    uncheckedExceptions: []
-  checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
-  excludes_analyse:
-    - */tests/*/data/*
+  checkMissingIterableValueType: false
+  treatPhpDocTypesAsCertain: false
+  implicitThrows: false
+  exceptions:
+    checkedExceptionRegexes:
+      - '#Exception#'
+      - '#Throwable#'
+    check:
+      missingCheckedExceptionInThrows: true
+      tooWideThrowType: true
   ignoreErrors:
-    - '~PHPDoc tag @throws with type .* is not compatible with parent~'
     - '~Parameter #2 \$haystack of static method PHPUnit\\Framework\\Assert::assertCount\(\) expects Countable\|iterable, Laminas\\Form\\ElementInterface given~'
     - '~Call to an undefined method Laminas\\Form\\ElementInterface::get\(\)~'
     - '~Cannot call method getObject\(\) on Laminas\\Form\\ElementInterface\|null~'
