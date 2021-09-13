@@ -20,7 +20,7 @@
   },
   "require-dev": {
     "ext-intl": "*",
-    "laminas/laminas-dependency-plugin": "^2.1.2",
+    "laminas/laminas-dependency-plugin": "^2.2.0",
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-modulemanager": "^2.10.2",
     "laminas/laminas-validator": "^2.14.5",
