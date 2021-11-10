@@ -22,6 +22,7 @@ use Laminas\Form\FieldsetInterface;
 use Laminas\Form\Form;
 use Laminas\Hydrator\ArraySerializableHydrator;
 use Laminas\Hydrator\ClassMethodsHydrator;
+use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\ObjectPropertyHydrator;
 use Laminas\InputFilter\ArrayInput;
 use Mimmi20\Form\Element\Group\ElementGroup;
@@ -999,7 +1000,7 @@ final class ElementGroupTest extends TestCase
 
         $this->prepareForExtract($collection);
 
-        $mockHydrator = $this->createMock('Laminas\Hydrator\HydratorInterface');
+        $mockHydrator = $this->createMock(HydratorInterface::class);
         $mockHydrator->expects(self::exactly(2))
             ->method('extract')
             ->willReturnCallback(
@@ -1037,7 +1038,11 @@ final class ElementGroupTest extends TestCase
 
         $this->prepareForExtract($collection);
 
-        $traversable = new ArrayObject($collection->getObject());
+        $arrayData = $collection->getObject();
+
+        assert(is_array($arrayData));
+
+        $traversable = new ArrayObject($arrayData);
         $collection->setObject($traversable);
 
         $expected = [
