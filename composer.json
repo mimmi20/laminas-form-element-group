@@ -26,9 +26,9 @@
     "laminas/laminas-validator": "^2.15.0",
     "mimmi20/coding-standard": "^2.5.0",
     "phpstan/extension-installer": "^1.1.0",
-    "phpstan/phpstan": "^0.12.99",
-    "phpstan/phpstan-deprecation-rules": "^0.12.6",
-    "phpstan/phpstan-phpunit": "^0.12.22",
+    "phpstan/phpstan": "^1.1.2",
+    "phpstan/phpstan-deprecation-rules": "^1.0.0",
+    "phpstan/phpstan-phpunit": "^1.0.0",
     "phpunit/phpunit": "^9.5.10"
   },
   "suggest": {

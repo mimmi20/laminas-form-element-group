@@ -12,7 +12,9 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\Form\Element\Group\TestAsset\Entity;
 
+use function assert;
 use function get_object_vars;
+use function is_array;
 
 final class Product
 {
@@ -78,11 +80,16 @@ final class Product
     /**
      * Required when binding to a form
      *
-     * @return array<string, array<int, Category>|Country|int|string|null>
+     * @phpstan-return array{name: string, price: int, categories: array<int, Category>, madeInCountry: Country|null}
      */
     public function getArrayCopy(): array
     {
-        return get_object_vars($this);
+        /** @phpstan-var array{name: string, price: int, categories: array<int, Category>, madeInCountry: Country|null} $vars */
+        $vars = get_object_vars($this);
+
+        assert(is_array($vars));
+
+        return $vars;
     }
 
     public function getMadeInCountry(): ?Country
