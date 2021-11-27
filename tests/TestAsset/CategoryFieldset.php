@@ -18,6 +18,9 @@ use Laminas\InputFilter\InputFilterProviderInterface;
 
 final class CategoryFieldset extends Fieldset implements InputFilterProviderInterface
 {
+    private const NAME     = 'name';
+    private const REQUIRED = 'required';
+
     public function __construct()
     {
         parent::__construct('category');
@@ -26,9 +29,9 @@ final class CategoryFieldset extends Fieldset implements InputFilterProviderInte
             ->setObject(new Entity\Category());
 
         $this->add([
-            'name' => 'name',
+            self::NAME => self::NAME,
             'options' => ['label' => 'Name of the category'],
-            'attributes' => ['required' => 'required'],
+            'attributes' => [self::REQUIRED => self::REQUIRED],
         ]);
     }
 
@@ -41,7 +44,7 @@ final class CategoryFieldset extends Fieldset implements InputFilterProviderInte
     public function getInputFilterSpecification(): array
     {
         return [
-            'name' => ['required' => true],
+            self::NAME => [self::REQUIRED => true],
         ];
     }
 }

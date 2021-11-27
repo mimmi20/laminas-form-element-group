@@ -56,6 +56,13 @@ use function sprintf;
 
 final class ElementGroupTest extends TestCase
 {
+    private const CATEGORY_NAMES    = ['electronics', 'furniture'];
+    private const PRODUCT_COUNTRIES = ['Russia', 'Jamaica'];
+    private const INPUT_DATA        = [
+        1 => ['name' => 'black'],
+        5 => ['name' => 'white'],
+    ];
+    private const NAMES             = ['foo', 'bar', 'baz', 'bat'];
     private FormCollection $form;
     private ProductFieldset $productFieldset;
 
@@ -1122,20 +1129,18 @@ final class ElementGroupTest extends TestCase
 
         $market = new stdClass();
 
-        $prices           = [100, 200];
-        $categoryNames    = ['electronics', 'furniture'];
-        $productCountries = ['Russia', 'Jamaica'];
+        $prices = [100, 200];
 
         $shop1          = new stdClass();
         $shop1->product = new Product();
         $shop1->product->setPrice($prices[0]);
 
         $category = new Category();
-        $category->setName($categoryNames[0]);
+        $category->setName(self::CATEGORY_NAMES[0]);
         $shop1->product->setCategories([$category]);
 
         $country = new Country();
-        $country->setName($productCountries[0]);
+        $country->setName(self::PRODUCT_COUNTRIES[0]);
         $shop1->product->setMadeInCountry($country);
 
         $shop2          = new stdClass();
@@ -1143,11 +1148,11 @@ final class ElementGroupTest extends TestCase
         $shop2->product->setPrice($prices[1]);
 
         $category = new Category();
-        $category->setName($categoryNames[1]);
+        $category->setName(self::CATEGORY_NAMES[1]);
         $shop2->product->setCategories([$category]);
 
         $country = new Country();
-        $country->setName($productCountries[1]);
+        $country->setName(self::PRODUCT_COUNTRIES[1]);
         $shop2->product->setMadeInCountry($country);
 
         $market->collection = [$shop1, $shop2];
@@ -1210,7 +1215,7 @@ final class ElementGroupTest extends TestCase
         }
 
         // test for collection -> fieldset -> fieldset ->field value
-        foreach ($productCountries as $_k => $_countryName) {
+        foreach (self::PRODUCT_COUNTRIES as $_k => $_countryName) {
             self::assertSame(
                 $_countryName,
                 $collection->get((string) $_k)
@@ -1222,7 +1227,7 @@ final class ElementGroupTest extends TestCase
         }
 
         // test collection -> fieldset -> collection -> fieldset -> field value
-        foreach ($categoryNames as $_k => $_categoryName) {
+        foreach (self::CATEGORY_NAMES as $_k => $_categoryName) {
             self::assertSame(
                 $_categoryName,
                 $collection->get((string) $_k)
@@ -1317,11 +1322,6 @@ final class ElementGroupTest extends TestCase
      */
     public function testPopulateValuesWithFirstKeyGreaterThanZero(): void
     {
-        $inputData = [
-            1 => ['name' => 'black'],
-            5 => ['name' => 'white'],
-        ];
-
         // Standalone Collection element
         $collection = new ElementGroup(
             'fieldsets',
@@ -1354,11 +1354,11 @@ final class ElementGroupTest extends TestCase
             )
         );
 
-        $collection->populateValues($inputData);
-        $formCollection->populateValues($inputData);
+        $collection->populateValues(self::INPUT_DATA);
+        $formCollection->populateValues(self::INPUT_DATA);
 
-        self::assertCount(count($collection->getFieldsets()), $inputData);
-        self::assertCount(count($formCollection->getFieldsets()), $inputData);
+        self::assertCount(count($collection->getFieldsets()), self::INPUT_DATA);
+        self::assertCount(count($formCollection->getFieldsets()), self::INPUT_DATA);
     }
 
     /**
@@ -1611,13 +1611,11 @@ final class ElementGroupTest extends TestCase
             ]
         );
 
-        $names = ['foo', 'bar', 'baz', 'bat'];
-
         $form->setData(
-            ['names' => $names]
+            ['names' => self::NAMES]
         );
 
-        self::assertCount(count($names), $form->get('names'));
+        self::assertCount(count(self::NAMES), $form->get('names'));
 
         $i          = 0;
         $collection = $form->get('names');
@@ -1632,7 +1630,7 @@ final class ElementGroupTest extends TestCase
         );
 
         foreach ($collection as $field) {
-            self::assertSame($names[$i], $field->getValue());
+            self::assertSame(self::NAMES[$i], $field->getValue());
             ++$i;
         }
     }

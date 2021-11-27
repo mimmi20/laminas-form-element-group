@@ -19,6 +19,12 @@ use Mimmi20\Form\Element\Group\ElementGroup;
 
 final class ProductFieldset extends Fieldset implements InputFilterProviderInterface
 {
+    private const NAME     = 'name';
+    private const OPTIONS  = 'options';
+    private const LABEL    = 'label';
+    private const REQUIRED = 'required';
+    private const TYPE     = 'type';
+
     public function __construct()
     {
         parent::__construct('product');
@@ -27,35 +33,35 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
             ->setObject(new Entity\Product());
 
         $this->add([
-            'name' => 'name',
-            'options' => ['label' => 'Name of the product'],
-            'attributes' => ['required' => 'required'],
+            self::NAME => self::NAME,
+            self::OPTIONS => [self::LABEL => 'Name of the product'],
+            'attributes' => [self::REQUIRED => self::REQUIRED],
         ]);
 
         $this->add([
-            'name' => 'price',
-            'options' => ['label' => 'Price of the product'],
-            'attributes' => ['required' => 'required'],
+            self::NAME => 'price',
+            self::OPTIONS => [self::LABEL => 'Price of the product'],
+            'attributes' => [self::REQUIRED => self::REQUIRED],
         ]);
 
         $this->add([
-            'type' => ElementGroup::class,
-            'name' => 'categories',
-            'options' => [
-                'label' => 'Please choose categories for this product',
+            self::TYPE => ElementGroup::class,
+            self::NAME => 'categories',
+            self::OPTIONS => [
+                self::LABEL => 'Please choose categories for this product',
                 'count' => 2,
                 'target_element' => [
-                    'type' => CategoryFieldset::class,
+                    self::TYPE => CategoryFieldset::class,
                 ],
             ],
         ]);
 
         $this->add([
-            'type' => CountryFieldset::class,
-            'name' => 'made_in_country',
+            self::TYPE => CountryFieldset::class,
+            self::NAME => 'made_in_country',
             'object' => Entity\Country::class,
             'hydrator' => ClassMethodsHydrator::class,
-            'options' => ['label' => 'Please choose the country'],
+            self::OPTIONS => [self::LABEL => 'Please choose the country'],
         ]);
     }
 
@@ -68,14 +74,14 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
     public function getInputFilterSpecification(): array
     {
         return [
-            'name' => ['required' => true],
+            self::NAME => [self::REQUIRED => true],
             'price' => [
-                'required' => true,
+                self::REQUIRED => true,
                 'validators' => [
-                    ['name' => 'IsFloat'],
+                    [self::NAME => 'IsFloat'],
                 ],
             ],
-            'made_in_country' => ['required' => false],
+            'made_in_country' => [self::REQUIRED => false],
         ];
     }
 }
