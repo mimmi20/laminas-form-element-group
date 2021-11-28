@@ -32,11 +32,9 @@ final class ElementGroup extends Collection
      */
     public function prepareElement(FormInterface $form): void
     {
-        if (true === $this->shouldCreateChildrenOnPrepareElement) {
-            if (null !== $this->targetElement && 0 < $this->count) {
-                while ($this->count > $this->lastChildIndex + 1) {
-                    $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
-                }
+        if ($this->shouldCreateChildrenOnPrepareElement && (null !== $this->targetElement && 0 < $this->count)) {
+            while ($this->count > $this->lastChildIndex + 1) {
+                $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
             }
         }
 
