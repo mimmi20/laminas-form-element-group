@@ -16,7 +16,7 @@
     "ext-mbstring": "*",
     "laminas/laminas-form": "^3.0.1",
     "laminas/laminas-hydrator": "^4.3.1",
-    "laminas/laminas-inputfilter": "^2.12.1"
+    "laminas/laminas-inputfilter": "^2.13.0"
   },
   "require-dev": {
     "ext-intl": "*",
