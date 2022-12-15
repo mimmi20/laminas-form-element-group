@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -46,7 +46,6 @@ use stdClass;
 use function assert;
 use function count;
 use function extension_loaded;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
@@ -59,9 +58,7 @@ final class ElementGroupTest extends TestCase
     private FormCollection $form;
     private ProductFieldset $productFieldset;
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     protected function setUp(): void
     {
         $this->form            = new FormCollection();
@@ -83,8 +80,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $placeholder = $collection->getTemplatePlaceholder();
@@ -106,8 +103,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         self::assertTrue($collection->allowAdd());
@@ -142,8 +139,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowAdd(true);
@@ -177,8 +174,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(true);
@@ -212,8 +209,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowAdd(true);
@@ -257,7 +254,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => 'anotherValue'],
                     ],
                 ],
-            ]
+            ],
         );
 
         self::assertTrue($this->form->isValid());
@@ -287,7 +284,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => 'anotherValue'],
                     ],
                 ],
-            ]
+            ],
         );
 
         self::assertFalse($this->form->isValid());
@@ -322,7 +319,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => null],
                     ],
                 ],
-            ]
+            ],
         );
 
         self::assertFalse($this->form->isValid());
@@ -349,8 +346,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         self::assertFalse($collection->shouldCreateTemplate());
@@ -375,7 +372,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => 'anotherValue'],
                     ],
                 ],
-            ]
+            ],
         );
 
         self::assertTrue($this->form->isValid());
@@ -396,8 +393,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(false);
@@ -415,7 +412,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => 'anotherValue'],
                     ],
                 ],
-            ]
+            ],
         );
 
         $this->form->isValid();
@@ -436,8 +433,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(true);
@@ -455,7 +452,7 @@ final class ElementGroupTest extends TestCase
                         'nested_fieldset' => ['anotherField' => 'anotherValue'],
                     ],
                 ],
-            ]
+            ],
         );
 
         self::assertTrue($this->form->isValid());
@@ -475,8 +472,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $element = new Element('foo');
@@ -488,7 +485,7 @@ final class ElementGroupTest extends TestCase
                 'allow_remove' => false,
                 'should_create_template' => true,
                 'template_placeholder' => 'foo',
-            ]
+            ],
         );
 
         self::assertInstanceOf('Laminas\Form\Element', $collection->getOption('target_element'));
@@ -513,8 +510,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $element = new Element('foo');
@@ -527,8 +524,8 @@ final class ElementGroupTest extends TestCase
                     'allow_remove' => false,
                     'should_create_template' => true,
                     'template_placeholder' => 'foo',
-                ]
-            )
+                ],
+            ),
         );
 
         self::assertInstanceOf('Laminas\Form\Element', $collection->getOption('target_element'));
@@ -539,9 +536,7 @@ final class ElementGroupTest extends TestCase
         self::assertSame('foo', $collection->getOption('template_placeholder'));
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testSetObjectNullRaisesException(): void
     {
         $collection = $this->form->get('colors');
@@ -551,17 +546,15 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->expectException(InvalidArgumentException::class);
         $collection->setObject(null);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testSetTargetElementNullRaisesException(): void
     {
         $collection = $this->form->get('colors');
@@ -571,8 +564,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->expectException(InvalidArgumentException::class);
@@ -593,8 +586,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $element = new Element('foo');
@@ -621,12 +614,12 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $originalObjectHash = spl_object_hash(
-            $collection->getTargetElement()->getObject()
+            $collection->getTargetElement()->getObject(),
         );
 
         $product = new Product();
@@ -651,11 +644,11 @@ final class ElementGroupTest extends TestCase
                         ['name' => 'herbert'],
                     ],
                 ],
-            ]
+            ],
         );
 
         $objectAfterExtractHash = spl_object_hash(
-            $collection->getTargetElement()->getObject()
+            $collection->getTargetElement()->getObject(),
         );
 
         self::assertSame($originalObjectHash, $objectAfterExtractHash);
@@ -701,7 +694,7 @@ final class ElementGroupTest extends TestCase
                         ['name' => 'herbert'],
                     ],
                 ],
-            ]
+            ],
         );
         $form->isValid();
 
@@ -726,7 +719,7 @@ final class ElementGroupTest extends TestCase
         $this->productFieldset->setUseAsBaseFieldset(true);
         $categories = $this->productFieldset->get('categories');
         $categories->setOptions(
-            ['create_new_objects' => true]
+            ['create_new_objects' => true],
         );
 
         $form = new Form();
@@ -755,7 +748,7 @@ final class ElementGroupTest extends TestCase
                         ['name' => 'herbert'],
                     ],
                 ],
-            ]
+            ],
         );
         $form->isValid();
 
@@ -789,7 +782,7 @@ final class ElementGroupTest extends TestCase
                     'count' => 1,
                     'allow_add' => true,
                 ],
-            ]
+            ],
         );
 
         $data = [
@@ -835,7 +828,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $addressesFieldset,
                     'count' => 1,
                 ],
-            ]
+            ],
         );
 
         $data = [
@@ -913,8 +906,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         self::assertSame([], $collection->extract());
@@ -935,8 +928,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->prepareForExtract($collection);
@@ -964,8 +957,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->prepareForExtract($collection);
@@ -994,8 +987,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->prepareForExtract($collection);
@@ -1032,8 +1025,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $this->prepareForExtract($collection);
@@ -1066,7 +1059,7 @@ final class ElementGroupTest extends TestCase
             [
                 'name' => 'email',
                 'type' => 'Email',
-            ]
+            ],
         );
 
         $myForm = new Form();
@@ -1075,7 +1068,7 @@ final class ElementGroupTest extends TestCase
                 'name' => 'collection',
                 'type' => ElementGroup::class,
                 'options' => ['target_element' => $myFieldset],
-            ]
+            ],
         );
 
         $data = [
@@ -1117,7 +1110,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $mainFieldset,
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $market = new stdClass();
@@ -1153,7 +1146,7 @@ final class ElementGroupTest extends TestCase
         $market->collection = [$shop1, $shop2];
         $form->bind($market);
 
-        //test for object binding
+        // test for object binding
         $_marketCollection = $form->get('collection');
         self::assertInstanceOf(ElementGroup::class, $_marketCollection);
 
@@ -1169,11 +1162,11 @@ final class ElementGroupTest extends TestCase
             // test for collection -> fieldset -> fieldset
             self::assertInstanceOf(
                 'Mimmi20Test\Form\Element\Group\TestAsset\CountryFieldset',
-                $_productFieldset->get('made_in_country')
+                $_productFieldset->get('made_in_country'),
             );
             self::assertInstanceOf(
                 'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country',
-                $_productFieldset->get('made_in_country')->getObject()
+                $_productFieldset->get('made_in_country')->getObject(),
             );
 
             // test for collection -> fieldset -> collection
@@ -1193,8 +1186,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         // test for correct extract and populate form values
@@ -1205,7 +1198,7 @@ final class ElementGroupTest extends TestCase
                 $collection->get((string) $_k)
                     ->get('product')
                     ->get('price')
-                    ->getValue()
+                    ->getValue(),
             );
         }
 
@@ -1217,7 +1210,7 @@ final class ElementGroupTest extends TestCase
                     ->get('product')
                     ->get('made_in_country')
                     ->get('name')
-                    ->getValue()
+                    ->getValue(),
             );
         }
 
@@ -1228,7 +1221,7 @@ final class ElementGroupTest extends TestCase
                 $collection->get((string) $_k)
                     ->get('product')
                     ->get('categories')->get('0')
-                    ->get('name')->getValue()
+                    ->get('name')->getValue(),
             );
         }
     }
@@ -1239,6 +1232,7 @@ final class ElementGroupTest extends TestCase
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \DomainException
      */
     public function testExtractFromTraversableImplementingToArrayThroughCollectionHydrator(): void
     {
@@ -1248,8 +1242,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         // this test is using a hydrator set on the collection
@@ -1271,6 +1265,7 @@ final class ElementGroupTest extends TestCase
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \DomainException
      */
     public function testExtractFromTraversableImplementingToArrayThroughTargetElementHydrator(): void
     {
@@ -1280,8 +1275,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         // this test is using a hydrator set on the target element of the collection
@@ -1291,8 +1286,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? get_class($targetElement) : gettype($targetElement)
-            )
+                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+            ),
         );
 
         $targetElement->setHydrator(new ArraySerializableHydrator());
@@ -1328,7 +1323,7 @@ final class ElementGroupTest extends TestCase
             [
                 'count' => 1,
                 'target_element' => new CategoryFieldset(),
-            ]
+            ],
         );
 
         $form = new Form();
@@ -1340,7 +1335,7 @@ final class ElementGroupTest extends TestCase
                     'count' => 1,
                     'target_element' => new CategoryFieldset(),
                 ],
-            ]
+            ],
         );
 
         // Collection element attached to a form
@@ -1350,8 +1345,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$formCollection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($formCollection)
-            )
+                $formCollection::class,
+            ),
         );
 
         $collection->populateValues($inputData);
@@ -1375,8 +1370,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(true);
@@ -1416,7 +1411,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $productFieldset,
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $mainFieldset = new Fieldset('main');
@@ -1431,7 +1426,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $nestedFieldset,
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $form = new Form();
@@ -1456,7 +1451,7 @@ final class ElementGroupTest extends TestCase
         $market->nested = $shop;
         $form->bind($market);
 
-        //test for object binding
+        // test for object binding
 
         $collection1 = $form->get('main');
 
@@ -1465,8 +1460,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 Fieldset::class,
-                get_class($collection1)
-            )
+                $collection1::class,
+            ),
         );
 
         // Main fieldset has a collection 'nested'...
@@ -1509,7 +1504,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $addressesFieldeset,
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $data = [
@@ -1543,23 +1538,24 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection1)
-            )
+                $collection1::class,
+            ),
         );
 
-        //test for object binding
+        // test for object binding
         foreach ($collection1->getFieldsets() as $_fieldset) {
             self::assertInstanceOf(Address::class, $_fieldset->getObject());
             foreach ($_fieldset->getFieldsets() as $_childFieldsetName => $_childFieldset) {
                 switch ($_childFieldsetName) {
                     case 'city':
                         self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\City', $_childFieldset->getObject());
+
                         break;
                     case 'phones':
                         foreach ($_childFieldset->getFieldsets() as $_phoneFieldset) {
                             self::assertInstanceOf(
                                 'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone',
-                                $_phoneFieldset->getObject()
+                                $_phoneFieldset->getObject(),
                             );
                         }
 
@@ -1568,7 +1564,7 @@ final class ElementGroupTest extends TestCase
             }
         }
 
-        //test for correct extract and populate
+        // test for correct extract and populate
         $index = 0;
 
         $collection2 = $form->get('addresses');
@@ -1578,13 +1574,13 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection2)
-            )
+                $collection2::class,
+            ),
         );
 
         foreach ($collection2 as $_addresses) {
             self::assertSame($data[$index]['street'], $_addresses->get('street')->getValue());
-            //assuming data has just 1 phone entry
+            // assuming data has just 1 phone entry
             foreach ($_addresses->get('phones') as $phone) {
                 self::assertSame($data[$index]['number'], $phone->get('number')->getValue());
             }
@@ -1608,13 +1604,13 @@ final class ElementGroupTest extends TestCase
                 'options' => [
                     'target_element' => new Element\Text(),
                 ],
-            ]
+            ],
         );
 
         $names = ['foo', 'bar', 'baz', 'bat'];
 
         $form->setData(
-            ['names' => $names]
+            ['names' => $names],
         );
 
         self::assertCount(count($names), $form->get('names'));
@@ -1627,8 +1623,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         foreach ($collection as $field) {
@@ -1654,11 +1650,11 @@ final class ElementGroupTest extends TestCase
                     'target_element' => new Element\Text(),
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $form->setData(
-            ['input' => 'foo']
+            ['input' => 'foo'],
         );
 
         $collection1 = $form->get('names');
@@ -1668,8 +1664,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection1)
-            )
+                $collection1::class,
+            ),
         );
 
         self::assertCount(0, $collection1);
@@ -1683,8 +1679,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection2)
-            )
+                $collection2::class,
+            ),
         );
 
         self::assertCount(2, $collection2);
@@ -1709,8 +1705,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setCount(3);
@@ -1740,7 +1736,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $text,
                     'count' => $count,
                 ],
-            ]
+            ],
         );
         $object = new ArrayObject(['text' => ['Foo', 'Bar']]);
         $form->bind($object);
@@ -1799,7 +1795,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $text,
                     'count' => $count,
                 ],
-            ]
+            ],
         );
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
         $form->bind($object);
@@ -1861,7 +1857,7 @@ final class ElementGroupTest extends TestCase
                     'should_create_template' => true,
                     'create_new_objects' => false,
                 ],
-            ]
+            ],
         );
 
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
@@ -1924,7 +1920,7 @@ final class ElementGroupTest extends TestCase
                     'should_create_template' => true,
                     'create_new_objects' => false,
                 ],
-            ]
+            ],
         );
 
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
@@ -1985,7 +1981,7 @@ final class ElementGroupTest extends TestCase
                     'should_create_template' => true,
                     'create_new_objects' => false,
                 ],
-            ]
+            ],
         );
 
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
@@ -2061,7 +2057,7 @@ final class ElementGroupTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $form->prepare();
@@ -2115,7 +2111,7 @@ final class ElementGroupTest extends TestCase
                     'target_element' => $mainFieldset,
                     'count' => 2,
                 ],
-            ]
+            ],
         );
 
         $model             = new stdClass();
@@ -2145,16 +2141,18 @@ final class ElementGroupTest extends TestCase
      */
     public function testCanHydrateObject(): void
     {
+        $color  = '#ffffff';
         $form   = $this->form;
         $object = new ArrayObject();
         $form->bind($object);
         $data = [
-            'colors' => ['#ffffff'],
+            'colors' => [$color],
         ];
         $form->setData($data);
         self::assertTrue($form->isValid());
         self::assertIsArray($object['colors']);
         self::assertCount(1, $object['colors']);
+        self::assertSame($color, $object['colors'][0]);
     }
 
     /**
@@ -2171,8 +2169,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(true);
@@ -2205,14 +2203,14 @@ final class ElementGroupTest extends TestCase
                 'name' => 'colors',
                 'type' => ArrayInput::class,
                 'required' => true,
-            ]
+            ],
         );
         $inputFilter->add(
             [
                 'name' => 'fieldsets',
                 'type' => ArrayInput::class,
                 'required' => true,
-            ]
+            ],
         );
 
         $this->form->setData([]);
@@ -2223,7 +2221,7 @@ final class ElementGroupTest extends TestCase
                 'colors' => ['isEmpty' => "Value is required and can't be empty"],
                 'fieldsets' => ['isEmpty' => "Value is required and can't be empty"],
             ],
-            $this->form->getMessages()
+            $this->form->getMessages(),
         );
     }
 
@@ -2244,7 +2242,7 @@ final class ElementGroupTest extends TestCase
                 'type' => ElementGroup::class,
                 'name' => 'fieldsets',
                 'options' => ['count' => 2],
-            ]
+            ],
         );
 
         $data = [
@@ -2263,7 +2261,7 @@ final class ElementGroupTest extends TestCase
             [
                 'fieldsets' => [],
             ],
-            $form->getData()
+            $form->getData(),
         );
     }
 
@@ -2284,8 +2282,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         $collection->setAllowRemove(false);
@@ -2300,6 +2298,7 @@ final class ElementGroupTest extends TestCase
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \DomainException
      */
     public function testSetObjectTraversable(): void
     {
@@ -2309,8 +2308,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$collection should be an Instance of %s, but was %s',
                 ElementGroup::class,
-                get_class($collection)
-            )
+                $collection::class,
+            ),
         );
 
         // this test is using a hydrator set on the target element of the collection
@@ -2320,8 +2319,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? get_class($targetElement) : gettype($targetElement)
-            )
+                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+            ),
         );
 
         $targetElement->setHydrator(new ArraySerializableHydrator());
@@ -2344,9 +2343,7 @@ final class ElementGroupTest extends TestCase
         self::assertSame([$obj2, $obj3], $collection->getObject());
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     private function prepareForExtract(ElementGroup $collection): void
     {
         $targetElement = $collection->getTargetElement();
@@ -2355,8 +2352,8 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? get_class($targetElement) : gettype($targetElement)
-            )
+                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+            ),
         );
 
         $obj1 = new stdClass();
@@ -2375,10 +2372,11 @@ final class ElementGroupTest extends TestCase
             [
                 'obj2' => $obj2,
                 'obj3' => $obj3,
-            ]
+            ],
         );
     }
 
+    /** @throws \DomainException */
     private function prepareForExtractWithCustomTraversable(FieldsetInterface $collection): void
     {
         $obj2 = new ArrayModel();

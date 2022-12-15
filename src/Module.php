@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,6 +22,8 @@ final class Module implements ConfigProviderInterface, DependencyIndicatorInterf
      *
      * @return array<string, array<string, array<int|string, string>>>
      * @phpstan-return array{form_elements: array{aliases: array<string, class-string>, factories: array<class-string, class-string>}}
+     *
+     * @throws void
      */
     public function getConfig(): array
     {
@@ -36,6 +38,8 @@ final class Module implements ConfigProviderInterface, DependencyIndicatorInterf
      * Expected to return an array of modules on which the current one depends on
      *
      * @return array<int, string>
+     *
+     * @throws void
      */
     public function getModuleDependencies(): array
     {
