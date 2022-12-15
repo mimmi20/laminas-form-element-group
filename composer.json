@@ -23,7 +23,12 @@
     "laminas/laminas-inputfilter": "^2.22.1"
   },
   "require-dev": {
+    "ext-dom": "*",
     "ext-intl": "*",
+    "ext-simplexml": "*",
+    "ext-tokenizer": "*",
+    "ext-xml": "*",
+    "ext-xmlwriter": "*",
     "laminas/laminas-dependency-plugin": "^2.2.0",
     "laminas/laminas-i18n": "^2.21.0",
     "laminas/laminas-modulemanager": "^2.14.0",
