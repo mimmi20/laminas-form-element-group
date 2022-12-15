@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -55,6 +55,8 @@ trait ModelTrait
 
     /**
      * @param array<string, mixed> $array
+     *
+     * @throws DomainException
      */
     public function exchangeArray(array $array): void
     {
@@ -69,6 +71,8 @@ trait ModelTrait
 
     /**
      * @return array<string, mixed>
+     *
+     * @throws void
      */
     public function getArrayCopy(): array
     {

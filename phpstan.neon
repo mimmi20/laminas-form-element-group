@@ -28,3 +28,6 @@ parameters:
     - '~Parameter #1 \$elementOrFieldset of method Laminas\\Form\\Element\\Collection::setTargetElement\(\) expects array\|Laminas\\Form\\ElementInterface\|Traversable, null given~'
     - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
     - '~Instanceof between null and Laminas\\Form\\FieldsetInterface will always evaluate to false~'
+    - '~should be compatible with return type \(\*NEVER\*\)~'
+    - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
+    - '~assertIsArray\(\) with null will always evaluate to false~'

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,16 +19,17 @@ use function is_array;
 final class Product
 {
     private string $name = '';
-
-    private int $price = 0;
+    private int $price   = 0;
 
     /** @var array<int, Category> */
     private array $categories = [];
 
-    private ?Country $madeInCountry = null;
+    private Country | null $madeInCountry = null;
 
     /**
      * @param array<int, Category> $categories
+     *
+     * @throws void
      */
     public function setCategories(array $categories): self
     {
@@ -39,12 +40,19 @@ final class Product
 
     /**
      * @return array<int, Category>
+     *
+     * @throws void
      */
     public function getCategories(): array
     {
         return $this->categories;
     }
 
+    /**
+     * @return $this
+     *
+     * @throws void
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -52,11 +60,17 @@ final class Product
         return $this;
     }
 
+    /** @throws void */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @return $this
+     *
+     * @throws void
+     */
     public function setPrice(int $price): self
     {
         $this->price = $price;
@@ -64,6 +78,7 @@ final class Product
         return $this;
     }
 
+    /** @throws void */
     public function getPrice(): int
     {
         return $this->price;
@@ -71,6 +86,8 @@ final class Product
 
     /**
      * Return category from index
+     *
+     * @throws void
      */
     public function getCategory(int $i): Category
     {
@@ -81,6 +98,8 @@ final class Product
      * Required when binding to a form
      *
      * @phpstan-return array{name: string, price: int, categories: array<int, Category>, madeInCountry: Country|null}
+     *
+     * @throws void
      */
     public function getArrayCopy(): array
     {
@@ -92,11 +111,13 @@ final class Product
         return $vars;
     }
 
-    public function getMadeInCountry(): ?Country
+    /** @throws void */
+    public function getMadeInCountry(): Country | null
     {
         return $this->madeInCountry;
     }
 
+    /** @throws void */
     public function setMadeInCountry(Country $country): void
     {
         $this->madeInCountry = $country;

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,12 +15,16 @@ namespace Mimmi20Test\Form\Element\Group\TestAsset\Entity;
 final class Address
 {
     private string $street;
-
-    private ?City $city = null;
+    private City | null $city = null;
 
     /** @var array<int|string, Phone> */
     private array $phones = [];
 
+    /**
+     * @return $this
+     *
+     * @throws void
+     */
     public function setStreet(string $street): self
     {
         $this->street = $street;
@@ -28,11 +32,17 @@ final class Address
         return $this;
     }
 
+    /** @throws void */
     public function getStreet(): string
     {
         return $this->street;
     }
 
+    /**
+     * @return $this
+     *
+     * @throws void
+     */
     public function setCity(City $city): self
     {
         $this->city = $city;
@@ -40,13 +50,16 @@ final class Address
         return $this;
     }
 
-    public function getCity(): ?City
+    /** @throws void */
+    public function getCity(): City | null
     {
         return $this->city;
     }
 
     /**
      * @param array<int|string, Phone> $phones
+     *
+     * @throws void
      */
     public function setPhones(array $phones): self
     {
@@ -57,6 +70,8 @@ final class Address
 
     /**
      * @return array<int|string, Phone>
+     *
+     * @throws void
      */
     public function getPhones(): array
     {

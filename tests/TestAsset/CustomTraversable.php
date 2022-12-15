@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,51 +21,46 @@ use function reset;
 
 final class CustomTraversable implements Iterator
 {
-    /** @var array<int|string, mixed> */
-    private array $data;
-
     /**
      * @param array<int|string, mixed> $data
+     *
+     * @throws void
      */
-    public function __construct(array $data)
+    public function __construct(private array $data)
     {
-        $this->data = $data;
     }
 
-    /**
-     * @return false|mixed
-     */
-    public function current()
+    /** @throws void */
+    public function current(): mixed
     {
         return current($this->data);
     }
 
-    /**
-     * @return false|mixed|void
-     */
-    public function next()
+    /** @throws void */
+    public function next(): void
     {
-        return next($this->data);
+        next($this->data);
     }
 
     /**
      * @return int|string|null
+     *
+     * @throws void
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->data);
     }
 
+    /** @throws void */
     public function valid(): bool
     {
         return null !== $this->key();
     }
 
-    /**
-     * @return false|mixed
-     */
-    public function rewind()
+    /** @throws void */
+    public function rewind(): void
     {
-        return reset($this->data);
+        reset($this->data);
     }
 }
