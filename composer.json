@@ -31,7 +31,7 @@
     "laminas/laminas-validator": "^2.15.1",
     "mimmi20/coding-standard": "^2.5.2",
     "phpstan/extension-installer": "^1.1.0",
-    "phpstan/phpstan": "^1.2.0",
+    "phpstan/phpstan": "^1.9.3",
     "phpstan/phpstan-deprecation-rules": "^1.0.0",
     "phpstan/phpstan-phpunit": "^1.0.0",
     "phpunit/phpunit": "^9.5.10",
