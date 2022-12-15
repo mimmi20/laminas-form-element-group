@@ -24,7 +24,7 @@
   },
   "require-dev": {
     "ext-intl": "*",
-    "ergebnis/composer-normalize": "^2.18.0",
+    "ergebnis/composer-normalize": "^2.28.3",
     "laminas/laminas-dependency-plugin": "^2.2.0",
     "laminas/laminas-i18n": "^2.13.0",
     "laminas/laminas-modulemanager": "^2.11.0",
