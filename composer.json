@@ -29,7 +29,7 @@
     "laminas/laminas-i18n": "^2.13.0",
     "laminas/laminas-modulemanager": "^2.11.0",
     "laminas/laminas-validator": "^2.15.1",
-    "mimmi20/coding-standard": "^2.5.2",
+    "mimmi20/coding-standard": "^2.9.6",
     "phpstan/extension-installer": "^1.1.0",
     "phpstan/phpstan": "^1.2.0",
     "phpstan/phpstan-deprecation-rules": "^1.0.0",
