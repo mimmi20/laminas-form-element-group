@@ -29,6 +29,7 @@
     "ext-tokenizer": "*",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
+    "infection/infection": "^0.26.16",
     "laminas/laminas-i18n": "^2.21.0",
     "laminas/laminas-modulemanager": "^2.14.0",
     "laminas/laminas-validator": "^2.29.0",
@@ -62,7 +63,8 @@
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
+      "phpstan/extension-installer": true,
+      "infection/extension-installer": true
     }
   },
   "extra": {
