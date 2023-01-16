@@ -41,9 +41,10 @@ final class ElementGroup extends Collection
         // Create a template that will also be prepared
         if ($this->shouldCreateTemplate && null !== $this->targetElement) {
             $templateElement = $this->getTemplateElement();
-            assert($templateElement instanceof ElementInterface || $templateElement instanceof FieldsetInterface);
 
-            $this->add($templateElement);
+            if (null !== $templateElement) {
+                $this->add($templateElement);
+            }
         }
 
         foreach ($this->iterator as $elementOrFieldset) {

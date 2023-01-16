@@ -26,9 +26,7 @@ final class ConfigProvider
      */
     public function __invoke(): array
     {
-        return [
-            'form_elements' => $this->getFormElementConfig(),
-        ];
+        return ['form_elements' => $this->getFormElementConfig()];
     }
 
     /**
@@ -41,14 +39,6 @@ final class ConfigProvider
      */
     public function getFormElementConfig(): array
     {
-        return [
-            'aliases' => [
-                'elementGroup' => ElementGroup::class,
-                'element_group' => ElementGroup::class,
-            ],
-            'factories' => [
-                ElementGroup::class => ElementFactory::class,
-            ],
-        ];
+        return ['aliases' => ['elementGroup' => ElementGroup::class, 'element_group' => ElementGroup::class], 'factories' => [ElementGroup::class => ElementFactory::class]];
     }
 }
