@@ -135,4 +135,6 @@ jobs:
           verbose: false
 
       - name: "Run mutation tests with infection/infection"
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
         run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=73 --min-msi=73 --coverage=.build/coverage --logger-github --no-progress -vv"
