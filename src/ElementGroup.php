@@ -13,14 +13,10 @@ declare(strict_types = 1);
 namespace Mimmi20\Form\Element\Group;
 
 use Laminas\Form\Element\Collection;
-use Laminas\Form\ElementInterface;
 use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
-
-use function assert;
 
 final class ElementGroup extends Collection
 {
@@ -41,9 +37,10 @@ final class ElementGroup extends Collection
         // Create a template that will also be prepared
         if ($this->shouldCreateTemplate && null !== $this->targetElement) {
             $templateElement = $this->getTemplateElement();
-            assert($templateElement instanceof ElementInterface || $templateElement instanceof FieldsetInterface);
 
-            $this->add($templateElement);
+            if (null !== $templateElement) {
+                $this->add($templateElement);
+            }
         }
 
         foreach ($this->iterator as $elementOrFieldset) {

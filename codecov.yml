@@ -1,6 +1,16 @@
 codecov:
+  require_ci_to_pass: false
   notify:
-    require_ci_to_pass: yes
+    wait_for_ci: false
+  status:
+    project:
+      default:
+        target: 100%
+        threshold: 1%
+        informational: true
+    patch:
+      default:
+        informational: true
 
 comment:
-  require_changes: yes
+  require_changes: true

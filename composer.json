@@ -29,10 +29,12 @@
     "ext-tokenizer": "*",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
+    "infection/infection": "^0.26.16",
     "laminas/laminas-i18n": "^2.21.0",
     "laminas/laminas-modulemanager": "^2.14.0",
     "laminas/laminas-validator": "^2.29.0",
     "mimmi20/coding-standard": "^3.0.26",
+    "nikic/php-parser": "^v4.15.2",
     "phpstan/extension-installer": "^1.2.0",
     "phpstan/phpstan": "^1.9.11",
     "phpstan/phpstan-deprecation-rules": "^1.1.1",
@@ -61,7 +63,8 @@
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "phpstan/extension-installer": true
+      "phpstan/extension-installer": true,
+      "infection/extension-installer": true
     }
   },
   "extra": {
