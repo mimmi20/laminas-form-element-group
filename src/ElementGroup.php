@@ -13,14 +13,10 @@ declare(strict_types = 1);
 namespace Mimmi20\Form\Element\Group;
 
 use Laminas\Form\Element\Collection;
-use Laminas\Form\ElementInterface;
 use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
-use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
-
-use function assert;
 
 final class ElementGroup extends Collection
 {
