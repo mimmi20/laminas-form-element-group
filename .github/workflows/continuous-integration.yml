@@ -13,14 +13,20 @@ concurrency:
   group: "${{ github.event_name }}-${{ github.workflow }}-${{ github.head_ref || github.run_id }}-${{ github.ref }}"
   cancel-in-progress: true
 
+env:
+  PHP_EXTENSIONS: "dom, iconv, intl, mbstring, simplexml, tokenizer, xml, xmlwriter"
+  PHP_INI_VALUES: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
+  COMPOSER_OPTIONS: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+  TOOLS: "composer:v2"
+
 jobs:
   ci:
     name: "Run CI"
 
     uses: "mimmi20/template/.github/workflows/ci.yml@master"
     with:
-      extensions: "intl"
-      ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
+      extensions: "${{ env.PHP_EXTENSIONS }}"
+      ini-values: "${{ env.PHP_INI_VALUES }}"
       composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
       composer-outdated-option: ""
     secrets:
@@ -43,7 +49,9 @@ jobs:
           - "ubuntu-20.04"
           - "ubuntu-22.04"
 
-        php-version: ${{ fromJson(needs.ci.outputs.version) }}
+        php-version:
+          - "8.1"
+          - "8.2"
 
         dependencies:
           - "highest"
@@ -62,10 +70,10 @@ jobs:
         uses: "shivammathur/setup-php@2.24.0"
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: "none, phar, json, opcache, ${{ join(fromJson(needs.ci.outputs.extensions), ', ') }}"
-          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
+          extensions: "none, phar, json, opcache, ${{ env.PHP_EXTENSIONS }}"
+          ini-values: "${{ env.PHP_INI_VALUES }}"
           coverage: "none"
-          tools: "composer:v2"
+          tools: "${{ env.TOOLS }}"
 
       - name: "Update dependencies with composer"
         uses: "ramsey/composer-install@2.2.0"
@@ -79,9 +87,7 @@ jobs:
   code-coverage:
     name: "Code Coverage with PHPUnit"
 
-    needs:
-      - "ci"
-      - "tests"
+    needs: "tests"
 
     runs-on: "${{ matrix.operating-system }}"
     timeout-minutes: 10
@@ -95,7 +101,9 @@ jobs:
           - "ubuntu-20.04"
           - "ubuntu-22.04"
 
-        php-version: ${{ fromJson(needs.ci.outputs.version) }}
+        php-version:
+          - "8.1"
+          - "8.2"
 
         dependencies:
           - "highest"
@@ -114,10 +122,10 @@ jobs:
         uses: "shivammathur/setup-php@2.24.0"
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: "none, phar, json, opcache, ${{ join(fromJson(needs.ci.outputs.extensions), ', ') }}, ctype, curl"
-          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0, xdebug.mode=coverage"
+          extensions: "none, phar, json, opcache, ctype, curl, ${{ env.PHP_EXTENSIONS }}"
+          ini-values: "${{ env.PHP_INI_VALUES }}, xdebug.mode=coverage"
           coverage: "xdebug"
-          tools: "composer:v2"
+          tools: "${{ env.TOOLS }}"
 
       - name: "Update dependencies with composer"
         uses: "ramsey/composer-install@2.2.0"
@@ -142,3 +150,22 @@ jobs:
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
         run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=73 --min-msi=73 --coverage=.build/coverage --logger-github --no-progress -vv"
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  tests-status:
+    name: "Unit & Integration Tests Status"
+    runs-on: "ubuntu-22.04"
+    needs:
+      - "ci"
+      - "tests"
+      - "code-coverage"
+    if: always()
+    steps:
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
