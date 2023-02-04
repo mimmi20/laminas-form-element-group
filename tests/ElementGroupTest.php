@@ -50,6 +50,7 @@ use function gettype;
 use function is_array;
 use function is_object;
 use function iterator_count;
+use function property_exists;
 use function spl_object_hash;
 use function sprintf;
 
@@ -2122,7 +2123,7 @@ final class ElementGroupTest extends TestCase
 
         $result = $form->getData();
         self::assertInstanceOf('stdClass', $result);
-        self::assertObjectHasAttribute('collection', $result);
+        self::assertTrue(property_exists($result, 'collection'));
         self::assertIsArray($result->collection);
         self::assertCount(1, $result->collection);
         self::assertInstanceOf('ArrayObject', $result->collection[0]);
