@@ -31,13 +31,17 @@
         <ini name="assert.exception" value="On"/>
         <ini name="intl.default_locale" value="de"/>
         <ini name="intl.use_exceptions" value="1"/>
+
+        <env name="COLUMNS" value="100" force="true" />
     </php>
 
-    <testsuite name="laminas-form-element-group Test Suite">
-        <directory>tests/</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="laminas-form-element-group Test Suite">
+            <directory>tests/</directory>
+        </testsuite>
+    </testsuites>
 
-    <coverage includeUncoveredFiles="true" processUncoveredFiles="true">
+    <coverage includeUncoveredFiles="true" processUncoveredFiles="true" cacheDirectory="./reports/.coverage-cache">
         <include>
             <directory suffix=".php">src/</directory>
         </include>

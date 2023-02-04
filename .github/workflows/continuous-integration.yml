@@ -149,8 +149,16 @@ jobs:
   # whenever we touch the matrix.
   tests-status:
     name: "Unit & Integration Tests Status"
+
     runs-on: "ubuntu-22.04"
-    needs: "code-coverage"
+
+    if: always()
+
+    needs:
+      - "ci"
+      - "tests"
+      - "code-coverage"
+
     steps:
       - name: Successful run
         if: ${{ !(contains(needs.*.result, 'failure')) }}
