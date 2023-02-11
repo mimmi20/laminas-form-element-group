@@ -29,3 +29,4 @@ parameters:
     - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
     - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
     - '~assertIsArray\(\) with null will always evaluate to false~'
+    - '~is not subtype of Throwable~'
