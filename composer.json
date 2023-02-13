@@ -33,7 +33,7 @@
     "laminas/laminas-i18n": "^2.21.0",
     "laminas/laminas-modulemanager": "^2.14.0",
     "laminas/laminas-validator": "^2.30.1",
-    "mimmi20/coding-standard": "^3.0.26",
+    "mimmi20/coding-standard": "^3.0.27",
     "nikic/php-parser": "^v4.15.3",
     "phpstan/extension-installer": "^1.2.0",
     "phpstan/phpstan": "^1.9.17",
