@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -45,7 +45,7 @@ final class ElementGroup extends Collection
 
         foreach ($this->iterator as $elementOrFieldset) {
             // Recursively prepare elements
-            if (!($elementOrFieldset instanceof ElementPrepareAwareInterface)) {
+            if (!$elementOrFieldset instanceof ElementPrepareAwareInterface) {
                 continue;
             }
 

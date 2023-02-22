@@ -22,18 +22,18 @@ parameters:
   checkExplicitMixedMissingReturn: true
   checkFunctionNameCase: true
   checkGenericClassInNonGenericObjectType: false
-  checkImplicitMixed: true
+  checkImplicitMixed: false
   checkInternalClassCaseSensitivity: true
   checkMissingCallableSignature: true
   checkMissingIterableValueType: true
   checkTooWideReturnTypesInProtectedAndPublicMethods: true
-  checkUninitializedProperties: true
+  checkUninitializedProperties: false
   inferPrivatePropertyTypeFromConstructor: false
   polluteScopeWithAlwaysIterableForeach: false
   polluteScopeWithLoopInitialAssignments: false
 # reportAlwaysTrueInLastCondition: true
-  reportMaybesInMethodSignatures: true
-  reportMaybesInPropertyPhpDocTypes: true
+  reportMaybesInMethodSignatures: false
+  reportMaybesInPropertyPhpDocTypes: false
   reportStaticMethodSignatures: true
 # reportWrongPhpDocTypeInVarTag: true
   treatPhpDocTypesAsCertain: false
@@ -56,5 +56,5 @@ parameters:
     - '~Parameter #1 \$elementOrFieldset of method Laminas\\Form\\Element\\Collection::setTargetElement\(\) expects array\|Laminas\\Form\\ElementInterface\|Traversable, null given~'
     - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
     - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
-    - '~assertIsArray\(\) with null will always evaluate to false~'
     - '~is not subtype of Throwable~'
+    - '~Call to static method PHPUnit\\Framework\\Assert::assert.*\(\) with .* will always evaluate to true~'

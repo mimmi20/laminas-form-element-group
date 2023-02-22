@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,8 +22,7 @@ final class Product
     private int $price   = 0;
 
     /** @var array<int, Category> */
-    private array $categories = [];
-
+    private array $categories             = [];
     private Country | null $madeInCountry = null;
 
     /**
