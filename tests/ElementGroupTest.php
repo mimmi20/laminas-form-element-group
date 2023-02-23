@@ -1553,7 +1553,6 @@ final class ElementGroupTest extends TestCase
                         self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\City', $_childFieldset->getObject());
 
                         break;
-
                     case 'phones':
                         foreach ($_childFieldset->getFieldsets() as $_phoneFieldset) {
                             self::assertInstanceOf(
