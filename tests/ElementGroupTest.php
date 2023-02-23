@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/laminas-form-element-group package.
  *
- * Copyright (c) 2021-2022, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -291,8 +291,6 @@ final class ElementGroupTest extends TestCase
         self::assertFalse($this->form->isValid());
         $messages = $this->form->getMessages();
 
-        assert(is_array($messages));
-
         self::assertArrayHasKey('colors', $messages);
     }
 
@@ -325,8 +323,6 @@ final class ElementGroupTest extends TestCase
 
         self::assertFalse($this->form->isValid());
         $messages = $this->form->getMessages();
-
-        assert(is_array($messages));
 
         self::assertCount(1, $messages);
         self::assertArrayHasKey('fieldsets', $messages);
@@ -998,7 +994,7 @@ final class ElementGroupTest extends TestCase
         $mockHydrator->expects(self::exactly(2))
             ->method('extract')
             ->willReturnCallback(
-                static fn ($object) => ['value' => $object->field . '_foo']
+                static fn ($object) => ['value' => $object->field . '_foo'],
             );
 
         $collection->setHydrator($mockHydrator);
@@ -1467,15 +1463,19 @@ final class ElementGroupTest extends TestCase
 
         // Main fieldset has a collection 'nested'...
         self::assertCount(1, $collection1->getFieldsets());
+
         foreach ($collection1->getFieldsets() as $_fieldset) {
             // ...which contains two stdClass objects (shops)
             self::assertCount(2, $_fieldset->getFieldsets());
+
             foreach ($_fieldset->getFieldsets() as $_nestedfieldset) {
                 // Each shop is represented by a single fieldset
                 self::assertCount(1, $_nestedfieldset->getFieldsets());
+
                 foreach ($_nestedfieldset->getFieldsets() as $_productfieldset) {
                     // Each shop fieldset contain a collection with two products in it
                     self::assertCount(2, $_productfieldset->getFieldsets());
+
                     foreach ($_productfieldset->getFieldsets() as $_product) {
                         self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product', $_product->getObject());
                     }
@@ -1546,6 +1546,7 @@ final class ElementGroupTest extends TestCase
         // test for object binding
         foreach ($collection1->getFieldsets() as $_fieldset) {
             self::assertInstanceOf(Address::class, $_fieldset->getObject());
+
             foreach ($_fieldset->getFieldsets() as $_childFieldsetName => $_childFieldset) {
                 switch ($_childFieldsetName) {
                     case 'city':
@@ -1581,6 +1582,7 @@ final class ElementGroupTest extends TestCase
 
         foreach ($collection2 as $_addresses) {
             self::assertSame($data[$index]['street'], $_addresses->get('street')->getValue());
+
             // assuming data has just 1 phone entry
             foreach ($_addresses->get('phones') as $phone) {
                 self::assertSame($data[$index]['number'], $phone->get('number')->getValue());
@@ -2219,8 +2221,8 @@ final class ElementGroupTest extends TestCase
 
         self::assertSame(
             [
-                'colors' => ['isEmpty' => "Value is required and can't be empty"],
-                'fieldsets' => ['isEmpty' => "Value is required and can't be empty"],
+                'colors' => ['isEmpty' => 'Value is required and can\'t be empty'],
+                'fieldsets' => ['isEmpty' => 'Value is required and can\'t be empty'],
             ],
             $this->form->getMessages(),
         );
@@ -2378,8 +2380,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /** @throws \DomainException */
-    private function prepareForExtractWithCustomTraversable(FieldsetInterface $collection): void
-    {
+    private function prepareForExtractWithCustomTraversable(
+        FieldsetInterface $collection,
+    ): void {
         $obj2 = new ArrayModel();
         $obj2->exchangeArray(['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1']);
         $obj3 = new ArrayModel();
