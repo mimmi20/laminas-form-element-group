@@ -29,10 +29,12 @@ use Mimmi20\Form\Element\Group\ElementGroup;
 use Mimmi20Test\Form\Element\Group\TestAsset\AddressFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\ArrayModel;
 use Mimmi20Test\Form\Element\Group\TestAsset\CategoryFieldset;
+use Mimmi20Test\Form\Element\Group\TestAsset\CountryFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\CustomCollection;
 use Mimmi20Test\Form\Element\Group\TestAsset\CustomTraversable;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Address;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Category;
+use Mimmi20Test\Form\Element\Group\TestAsset\Entity\City;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product;
@@ -68,10 +70,7 @@ final class ElementGroupTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws Exception
-     */
+    /** @throws Exception */
     public function testCanRetrieveDefaultPlaceholder(): void
     {
         $collection = $this->form->get('colors');
@@ -90,10 +89,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCannotAllowNewElementsIfAllowAddIsFalse(): void
     {
@@ -126,10 +124,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCanAddNewElementsIfAllowAddIsTrue(): void
     {
@@ -161,10 +158,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCanRemoveElementsIfAllowRemoveIsTrue(): void
     {
@@ -196,10 +192,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCanReplaceElementsIfAllowAddAndAllowRemoveIsTrue(): void
     {
@@ -232,7 +227,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -262,7 +256,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -295,7 +288,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -329,7 +321,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -416,7 +407,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -456,7 +446,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -494,7 +483,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -570,7 +558,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -594,7 +581,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -652,7 +638,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -701,7 +686,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -755,7 +739,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -801,7 +784,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -858,7 +840,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -889,10 +870,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testExtractDefaultIsEmptyArray(): void
@@ -911,10 +890,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testExtractThroughTargetElementHydrator(): void
@@ -940,10 +917,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testExtractMaintainsTargetElementObject(): void
@@ -970,10 +945,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testExtractThroughCustomHydrator(): void
@@ -1008,10 +981,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testExtractFromTraversable(): void
@@ -1044,7 +1015,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1083,7 +1053,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1148,21 +1117,21 @@ final class ElementGroupTest extends TestCase
         self::assertInstanceOf(ElementGroup::class, $_marketCollection);
 
         foreach ($_marketCollection as $_shopFieldset) {
-            self::assertInstanceOf('Laminas\Form\Fieldset', $_shopFieldset);
-            self::assertInstanceOf('stdClass', $_shopFieldset->getObject());
+            self::assertInstanceOf(Fieldset::class, $_shopFieldset);
+            self::assertInstanceOf(stdClass::class, $_shopFieldset->getObject());
 
             // test for collection -> fieldset
             $_productFieldset = $_shopFieldset->get('product');
-            self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset', $_productFieldset);
-            self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product', $_productFieldset->getObject());
+            self::assertInstanceOf(ProductFieldset::class, $_productFieldset);
+            self::assertInstanceOf(Product::class, $_productFieldset->getObject());
 
             // test for collection -> fieldset -> fieldset
             self::assertInstanceOf(
-                'Mimmi20Test\Form\Element\Group\TestAsset\CountryFieldset',
+                CountryFieldset::class,
                 $_productFieldset->get('made_in_country'),
             );
             self::assertInstanceOf(
-                'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country',
+                Country::class,
                 $_productFieldset->get('made_in_country')->getObject(),
             );
 
@@ -1224,7 +1193,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1257,7 +1225,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1302,10 +1269,10 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testPopulateValuesWithFirstKeyGreaterThanZero(): void
     {
@@ -1354,10 +1321,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCanRemoveAllElementsIfAllowRemoveIsTrue(): void
     {
@@ -1387,7 +1353,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1477,7 +1442,7 @@ final class ElementGroupTest extends TestCase
                     self::assertCount(2, $_productfieldset->getFieldsets());
 
                     foreach ($_productfieldset->getFieldsets() as $_product) {
-                        self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product', $_product->getObject());
+                        self::assertInstanceOf(Product::class, $_product->getObject());
                     }
                 }
             }
@@ -1485,7 +1450,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1550,13 +1514,13 @@ final class ElementGroupTest extends TestCase
             foreach ($_fieldset->getFieldsets() as $_childFieldsetName => $_childFieldset) {
                 switch ($_childFieldsetName) {
                     case 'city':
-                        self::assertInstanceOf('Mimmi20Test\Form\Element\Group\TestAsset\Entity\City', $_childFieldset->getObject());
+                        self::assertInstanceOf(City::class, $_childFieldset->getObject());
 
                         break;
                     case 'phones':
                         foreach ($_childFieldset->getFieldsets() as $_phoneFieldset) {
                             self::assertInstanceOf(
-                                'Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone',
+                                Phone::class,
                                 $_phoneFieldset->getObject(),
                             );
                         }
@@ -1593,7 +1557,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1637,7 +1600,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1690,7 +1652,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      */
@@ -1718,7 +1679,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1776,7 +1736,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1835,7 +1794,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1899,7 +1857,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -1962,7 +1919,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -2019,7 +1975,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      *
@@ -2088,7 +2043,6 @@ final class ElementGroupTest extends TestCase
     /**
      * Unit test to ensure behavior of extract() method is unaffected by refactor
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -2134,7 +2088,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -2159,10 +2112,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testCanRemoveMultipleElements(): void
     {
@@ -2191,7 +2143,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -2231,7 +2182,6 @@ final class ElementGroupTest extends TestCase
     /**
      * @see https://github.com/zendframework/zend-form/pull/230
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
@@ -2269,10 +2219,9 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testPopulateValuesTraversable(): void
     {
@@ -2296,7 +2245,6 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
