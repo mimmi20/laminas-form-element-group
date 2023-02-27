@@ -16,7 +16,6 @@ use Mimmi20\Form\Element\Group\ConfigProvider;
 use Mimmi20\Form\Element\Group\ElementGroup;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class ConfigProviderTest extends TestCase
 {
@@ -28,10 +27,7 @@ final class ConfigProviderTest extends TestCase
         $this->provider = new ConfigProvider();
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testProviderDefinesExpectedFactoryServices(): void
     {
         $formElementConfig = $this->provider->getFormElementConfig();
@@ -49,10 +45,7 @@ final class ConfigProviderTest extends TestCase
         self::assertArrayHasKey('element_group', $aliases);
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidArgumentException
-     */
+    /** @throws Exception */
     public function testInvocationReturnsArrayWithDependencies(): void
     {
         $config = ($this->provider)();

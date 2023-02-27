@@ -13,10 +13,23 @@ declare(strict_types = 1);
 namespace Mimmi20\Form\Element\Group;
 
 use Laminas\Form\Element\Collection;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\Exception\DomainException;
 use Laminas\Form\Exception\InvalidArgumentException;
+use Laminas\Form\Fieldset;
+use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Traversable;
+
+use function array_key_exists;
+use function assert;
+use function count;
+use function is_array;
+use function is_int;
+use function is_iterable;
+use function sprintf;
 
 final class ElementGroup extends Collection
 {
@@ -59,5 +72,142 @@ final class ElementGroup extends Collection
         }
 
         $this->remove($this->templatePlaceholder);
+    }
+
+    /**
+     * Populate values
+     *
+     * @phpstan-param iterable<mixed> $data
+     *
+     * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     */
+    public function populateValues(iterable $data): void
+    {
+        if ($data instanceof Traversable) {
+            $data = ArrayUtils::iteratorToArray($data);
+        }
+
+        if (!$this->allowRemove && count($data) < $this->count) {// exit;
+            throw new DomainException(sprintf(
+                'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
+                . 'to true, or re-submit the form.',
+                self::class,
+            ));
+        }
+
+        // Check to see if elements have been replaced or removed
+        $toRemove = [];
+
+        foreach ($this as $name => $elementOrFieldset) {
+            if (array_key_exists($name, $data) || $elementOrFieldset instanceof self) {
+                continue;
+            }
+
+            // var_dump($name, get_class($elementOrFieldset));
+
+            if (!$this->allowRemove) {// exit;
+                throw new DomainException(sprintf(
+                    'Elements have been removed from the collection (%s) but the allow_remove option is not true.',
+                    self::class,
+                ));
+            }
+
+            $toRemove[] = $name;
+        }
+
+        foreach ($toRemove as $name) {
+            $this->remove((string) $name);
+        }
+
+        foreach ($data as $key => $value) {
+            $elementOrFieldset = null;
+
+            if ($this->has((string) $key)) {
+                $elementOrFieldset = $this->get((string) $key);
+            } elseif ($this->targetElement) {
+                $elementOrFieldset = $this->addNewTargetElementInstance((string) $key);
+
+                if (is_int($key) && $key > $this->lastChildIndex) {
+                    $this->lastChildIndex = $key;
+                }
+            }
+
+            if ($elementOrFieldset instanceof FieldsetInterface && is_iterable($value)) {
+                $elementOrFieldset->populateValues($value);
+
+                continue;
+            }
+
+            if (null !== $elementOrFieldset) {
+                $elementOrFieldset->setAttribute('value', $value);
+            }
+        }
+
+        if (!$this->createNewObjects()) {
+            $this->replaceTemplateObjects();
+        }
+    }
+
+    /**
+     * @return array<mixed>
+     *
+     * @throws InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     */
+    public function extract(): array
+    {
+        if ($this->object instanceof Traversable) {
+            $this->object = ArrayUtils::iteratorToArray($this->object, false);
+        } elseif (!is_array($this->object)) {
+            return [];
+        }
+
+        $values = [];
+
+        foreach ($this->object as $key => $value) {
+            // If a hydrator is provided, our work here is done
+            if ($this->hydrator) {
+                $values[$key] = $this->hydrator->extract($value);
+
+                continue;
+            }
+
+            // If the target element is a fieldset that can accept the provided value
+            // we should clone it, inject the value and extract the data
+            if ($this->targetElement instanceof FieldsetInterface) {
+                if (!$this->targetElement->allowObjectBinding($value)) {
+                    continue;
+                }
+
+                $targetElement = clone $this->targetElement;
+                assert($targetElement instanceof Fieldset);
+                $targetElement->setObject($value);
+                $values[$key] = $targetElement->extract();
+
+                if (!$this->createNewObjects() && $this->has((string) $key)) {
+                    $fieldset = $this->get((string) $key);
+                    assert($fieldset instanceof FieldsetInterface);
+                    $fieldset->setObject($value);
+                }
+
+                continue;
+            }
+
+            // If the target element is a non-fieldset element, just use the value
+            if ($this->targetElement instanceof ElementInterface) {
+                $values[$key] = $value;
+
+                if (!$this->createNewObjects() && $this->has((string) $key)) {
+                    $this->get((string) $key)->setValue($value);
+                }
+
+                continue;
+            }
+
+            $values[$key] = $value;
+        }
+
+        return $values;
     }
 }
