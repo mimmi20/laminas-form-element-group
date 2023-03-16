@@ -41,6 +41,7 @@ use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product;
 use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection;
 use Mimmi20Test\Form\Element\Group\TestAsset\PhoneFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -48,9 +49,8 @@ use stdClass;
 use function assert;
 use function count;
 use function extension_loaded;
-use function gettype;
+use function get_debug_type;
 use function is_array;
-use function is_object;
 use function iterator_count;
 use function property_exists;
 use function spl_object_hash;
@@ -474,7 +474,7 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertInstanceOf('Laminas\Form\Element', $collection->getOption('target_element'));
+        self::assertInstanceOf(Element::class, $collection->getOption('target_element'));
         self::assertSame(2, $collection->getOption('count'));
         self::assertTrue($collection->getOption('allow_add'));
         self::assertFalse($collection->getOption('allow_remove'));
@@ -513,7 +513,7 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
-        self::assertInstanceOf('Laminas\Form\Element', $collection->getOption('target_element'));
+        self::assertInstanceOf(Element::class, $collection->getOption('target_element'));
         self::assertSame(2, $collection->getOption('count'));
         self::assertTrue($collection->getOption('allow_add'));
         self::assertFalse($collection->getOption('allow_remove'));
@@ -577,7 +577,7 @@ final class ElementGroupTest extends TestCase
         $element = new Element('foo');
         $collection->setTargetElement($element);
 
-        self::assertInstanceOf('Laminas\Form\Element', $collection->getTargetElement());
+        self::assertInstanceOf(Element::class, $collection->getTargetElement());
     }
 
     /**
@@ -742,10 +742,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6585
-     * @group issue-6614
      */
+    #[Group('issue-6585')]
+    #[Group('issue-6614')]
     public function testAddingCollectionElementAfterBind(): void
     {
         $form = new Form();
@@ -787,10 +786,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6585
-     * @group issue-6614
      */
+    #[Group('issue-6585')]
+    #[Group('issue-6614')]
     public function testDoesNotCreateNewObjectsWhenUsingNestedCollections(): void
     {
         $addressesFieldset = new AddressFieldset();
@@ -1250,7 +1248,7 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+                get_debug_type($targetElement),
             ),
         );
 
@@ -1358,6 +1356,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCanBindObjectMultipleNestedFieldsets(): void
     {
+        $products        = [];
+        $shop            = [];
         $productFieldset = new ProductFieldset();
         $productFieldset->setHydrator(new ArraySerializableHydrator());
         $productFieldset->setObject(new Product());
@@ -1682,10 +1682,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface(): void
     {
         $count = 2;
@@ -1739,11 +1738,10 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
-     * @group test-3
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface2(): void
     {
         $count = 2;
@@ -1797,11 +1795,10 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
-     * @group test-3
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface3(): void
     {
         $count = 2;
@@ -1860,11 +1857,10 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
-     * @group test-4
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-4')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface4(): void
     {
         $form = new Form('test');
@@ -1922,11 +1918,10 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
-     * @group test-3
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface5(): void
     {
         $form = new Form('test');
@@ -1977,11 +1972,10 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     *
-     * @group issue-6263
-     * @group issue-6518
-     * @group test-3
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface6(): void
     {
         $form = new Form('test');
@@ -2046,10 +2040,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6518
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
     public function testCollectionShouldSilentlyIgnorePopulatingFieldsetWithDisallowedObject(): void
     {
         $mainFieldset = new Fieldset();
@@ -2091,10 +2084,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     *
-     * @group issue-6263
-     * @group issue-6298
      */
+    #[Group('issue-6263')]
+    #[Group('issue-6298')]
     public function testCanHydrateObject(): void
     {
         $color  = '#ffffff';
@@ -2270,7 +2262,7 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+                get_debug_type($targetElement),
             ),
         );
 
@@ -2303,7 +2295,7 @@ final class ElementGroupTest extends TestCase
             sprintf(
                 '$targetElement should be an Instance of %s, but was %s',
                 FieldsetInterface::class,
-                is_object($targetElement) ? $targetElement::class : gettype($targetElement),
+                get_debug_type($targetElement),
             ),
         );
 
