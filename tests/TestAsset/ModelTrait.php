@@ -28,13 +28,11 @@ trait ModelTrait
     private $foobar;
 
     /**
-     * @param mixed $value
-     *
      * @throws DomainException
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         throw new DomainException('Overloading to set values is not allowed');
     }

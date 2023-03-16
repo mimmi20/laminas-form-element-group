@@ -88,7 +88,7 @@ final class ElementGroup extends Collection
             $data = ArrayUtils::iteratorToArray($data);
         }
 
-        if (!$this->allowRemove && count($data) < $this->count) {// exit;
+        if (!$this->allowRemove && count($data) < $this->count) {
             throw new DomainException(sprintf(
                 'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
                 . 'to true, or re-submit the form.',
@@ -96,7 +96,11 @@ final class ElementGroup extends Collection
             ));
         }
 
-        // Check to see if elements have been replaced or removed
+        /**
+         * Check to see if elements have been replaced or removed
+         *
+         * @var array<int|string> $toRemove
+         */
         $toRemove = [];
 
         foreach ($this as $name => $elementOrFieldset) {
@@ -104,9 +108,7 @@ final class ElementGroup extends Collection
                 continue;
             }
 
-            // var_dump($name, get_class($elementOrFieldset));
-
-            if (!$this->allowRemove) {// exit;
+            if (!$this->allowRemove) {
                 throw new DomainException(sprintf(
                     'Elements have been removed from the collection (%s) but the allow_remove option is not true.',
                     self::class,
