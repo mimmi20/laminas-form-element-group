@@ -33,13 +33,13 @@
     "laminas/laminas-i18n": "^2.22.0",
     "laminas/laminas-modulemanager": "^2.14.0",
     "laminas/laminas-validator": "^2.30.1",
-    "mimmi20/coding-standard": "4.0.2",
+    "mimmi20/coding-standard": "4.0.3",
     "nikic/php-parser": "^v4.15.4",
     "phpstan/extension-installer": "^1.2.0",
     "phpstan/phpstan": "^1.10.8",
     "phpstan/phpstan-deprecation-rules": "^1.1.3",
     "phpstan/phpstan-phpunit": "^1.3.11",
-    "phpunit/phpunit": "^10.0.18"
+    "phpunit/phpunit": "^10.0.19"
   },
   "suggest": {
     "ext-intl": "required to use the Translator",
