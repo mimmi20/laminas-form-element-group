@@ -56,6 +56,7 @@ use function property_exists;
 use function spl_object_hash;
 use function sprintf;
 
+/** @phpcs:disable Mimmi20CodingStandard.Commenting.FunctionCommentThrowTag.MissingFunctionComment */
 final class ElementGroupTest extends TestCase
 {
     private FormCollection $form;
@@ -2320,9 +2321,8 @@ final class ElementGroupTest extends TestCase
     }
 
     /** @throws \DomainException */
-    private function prepareForExtractWithCustomTraversable(
-        FieldsetInterface $collection,
-    ): void {
+    private function prepareForExtractWithCustomTraversable(FieldsetInterface $collection): void
+    {
         $obj2 = new ArrayModel();
         $obj2->exchangeArray(['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1']);
         $obj3 = new ArrayModel();
