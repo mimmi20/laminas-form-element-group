@@ -29,9 +29,9 @@ final class CategoryFieldset extends Fieldset implements InputFilterProviderInte
             ->setObject(new Entity\Category());
 
         $this->add([
+            'attributes' => ['required' => 'required'],
             'name' => 'name',
             'options' => ['label' => 'Name of the category'],
-            'attributes' => ['required' => 'required'],
         ]);
     }
 

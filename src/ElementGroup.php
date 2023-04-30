@@ -27,6 +27,7 @@ use function array_key_exists;
 use function assert;
 use function count;
 use function is_array;
+use function is_countable;
 use function is_int;
 use function is_iterable;
 use function sprintf;
@@ -41,17 +42,23 @@ final class ElementGroup extends Collection
      */
     public function prepareElement(FormInterface $form): void
     {
-        if ($this->shouldCreateChildrenOnPrepareElement && (null !== $this->targetElement && 0 < $this->count)) {
+        if (
+            $this->shouldCreateChildrenOnPrepareElement
+            && (
+                $this->targetElement !== null
+                && 0 < $this->count
+            )
+        ) {
             while ($this->count > $this->lastChildIndex + 1) {
                 $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
             }
         }
 
         // Create a template that will also be prepared
-        if ($this->shouldCreateTemplate && null !== $this->targetElement) {
+        if ($this->shouldCreateTemplate && $this->targetElement !== null) {
             $templateElement = $this->getTemplateElement();
 
-            if (null !== $templateElement) {
+            if ($templateElement !== null) {
                 $this->add($templateElement);
             }
         }
@@ -88,7 +95,7 @@ final class ElementGroup extends Collection
             $data = ArrayUtils::iteratorToArray($data);
         }
 
-        if (!$this->allowRemove && count($data) < $this->count) {
+        if (!$this->allowRemove && (is_countable($data) ? count($data) : 0) < $this->count) {
             throw new DomainException(sprintf(
                 'There are fewer elements than specified in the collection (%s). Either set the allow_remove option '
                 . 'to true, or re-submit the form.',
@@ -141,7 +148,7 @@ final class ElementGroup extends Collection
                 continue;
             }
 
-            if (null !== $elementOrFieldset) {
+            if ($elementOrFieldset !== null) {
                 $elementOrFieldset->setAttribute('value', $value);
             }
         }

@@ -56,7 +56,6 @@ use function property_exists;
 use function spl_object_hash;
 use function sprintf;
 
-/** @phpcs:disable Mimmi20CodingStandard.Commenting.FunctionCommentThrowTag.MissingFunctionComment */
 final class ElementGroupTest extends TestCase
 {
     private FormCollection $form;
@@ -466,11 +465,11 @@ final class ElementGroupTest extends TestCase
         $element = new Element('foo');
         $collection->setOptions(
             [
-                'target_element' => $element,
-                'count' => 2,
                 'allow_add' => true,
                 'allow_remove' => false,
+                'count' => 2,
                 'should_create_template' => true,
+                'target_element' => $element,
                 'template_placeholder' => 'foo',
             ],
         );
@@ -504,11 +503,11 @@ final class ElementGroupTest extends TestCase
         $collection->setOptions(
             new CustomTraversable(
                 [
-                    'target_element' => $element,
-                    'count' => 2,
                     'allow_add' => true,
                     'allow_remove' => false,
+                    'count' => 2,
                     'should_create_template' => true,
+                    'target_element' => $element,
                     'template_placeholder' => 'foo',
                 ],
             ),
@@ -621,12 +620,12 @@ final class ElementGroupTest extends TestCase
         $form->setData(
             [
                 'product' => [
-                    'name' => 'franz',
-                    'price' => 13,
                     'categories' => [
                         ['name' => 'sepp'],
                         ['name' => 'herbert'],
                     ],
+                    'name' => 'franz',
+                    'price' => 13,
                 ],
             ],
         );
@@ -670,12 +669,12 @@ final class ElementGroupTest extends TestCase
         $form->setData(
             [
                 'product' => [
-                    'name' => 'franz',
-                    'price' => 13,
                     'categories' => [
                         ['name' => 'sepp'],
                         ['name' => 'herbert'],
                     ],
+                    'name' => 'franz',
+                    'price' => 13,
                 ],
             ],
         );
@@ -723,12 +722,12 @@ final class ElementGroupTest extends TestCase
         $form->setData(
             [
                 'product' => [
-                    'name' => 'franz',
-                    'price' => 13,
                     'categories' => [
                         ['name' => 'sepp'],
                         ['name' => 'herbert'],
                     ],
+                    'name' => 'franz',
+                    'price' => 13,
                 ],
             ],
         );
@@ -756,12 +755,12 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'phones',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $phone,
-                    'count' => 1,
                     'allow_add' => true,
+                    'count' => 1,
+                    'target_element' => $phone,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -801,21 +800,21 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'addresses',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $addressesFieldset,
                     'count' => 1,
+                    'target_element' => $addressesFieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
         $data = [
             'addresses' => [
                 [
-                    'street' => 'street1',
                     'phones' => [
                         ['number' => '1234567'],
                     ],
+                    'street' => 'street1',
                 ],
             ],
         ];
@@ -861,11 +860,17 @@ final class ElementGroupTest extends TestCase
 
         // this will pass the test
         $form->bind($market);
-        self::assertSame(count($categories), iterator_count($form->get('product')->get('categories')->getIterator()));
+        self::assertSame(
+            count($categories),
+            iterator_count($form->get('product')->get('categories')->getIterator()),
+        );
 
         // this won't pass, but must
         $form->bind($market);
-        self::assertSame(count($categories), iterator_count($form->get('product')->get('categories')->getIterator()));
+        self::assertSame(
+            count($categories),
+            iterator_count($form->get('product')->get('categories')->getIterator()),
+        );
     }
 
     /**
@@ -1032,8 +1037,8 @@ final class ElementGroupTest extends TestCase
         $myForm->add(
             [
                 'name' => 'collection',
-                'type' => ElementGroup::class,
                 'options' => ['target_element' => $myFieldset],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1070,11 +1075,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'collection',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $mainFieldset,
                     'count' => 2,
+                    'target_element' => $mainFieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1216,8 +1221,8 @@ final class ElementGroupTest extends TestCase
         $this->prepareForExtractWithCustomTraversable($collection);
 
         $expected = [
-            ['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1'],
-            ['foo' => 'foo_value_2', 'bar' => 'bar_value_2', 'foobar' => 'foobar_value_2'],
+            ['bar' => 'bar_value_1', 'foo' => 'foo_value_1', 'foobar' => 'foobar_value_1'],
+            ['bar' => 'bar_value_2', 'foo' => 'foo_value_2', 'foobar' => 'foobar_value_2'],
         ];
 
         self::assertSame($expected, $collection->extract());
@@ -1260,8 +1265,8 @@ final class ElementGroupTest extends TestCase
         $this->prepareForExtractWithCustomTraversable($collection);
 
         $expected = [
-            ['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1'],
-            ['foo' => 'foo_value_2', 'bar' => 'bar_value_2', 'foobar' => 'foobar_value_2'],
+            ['bar' => 'bar_value_1', 'foo' => 'foo_value_1', 'foobar' => 'foobar_value_1'],
+            ['bar' => 'bar_value_2', 'foo' => 'foo_value_2', 'foobar' => 'foobar_value_2'],
         ];
 
         self::assertSame($expected, $collection->extract());
@@ -1292,12 +1297,12 @@ final class ElementGroupTest extends TestCase
         $form = new Form();
         $form->add(
             [
-                'type' => ElementGroup::class,
                 'name' => 'collection',
                 'options' => [
                     'count' => 1,
                     'target_element' => new CategoryFieldset(),
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1369,11 +1374,11 @@ final class ElementGroupTest extends TestCase
         $nestedFieldset->add(
             [
                 'name' => 'products',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $productFieldset,
                     'count' => 2,
+                    'target_element' => $productFieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1384,11 +1389,11 @@ final class ElementGroupTest extends TestCase
         $mainFieldset->add(
             [
                 'name' => 'nested',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $nestedFieldset,
                     'count' => 2,
+                    'target_element' => $nestedFieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1465,11 +1470,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'addresses',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $addressesFieldeset,
                     'count' => 2,
+                    'target_element' => $addressesFieldeset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1567,10 +1572,10 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'names',
-                'type' => ElementGroup::class,
                 'options' => [
                     'target_element' => new Element\Text(),
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1611,11 +1616,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'names',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => new Element\Text(),
                     'count' => 2,
+                    'target_element' => new Element\Text(),
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1694,11 +1699,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'text',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $text,
                     'count' => $count,
+                    'target_element' => $text,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
         $object = new ArrayObject(['text' => ['Foo', 'Bar']]);
@@ -1751,11 +1756,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'text',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $text,
                     'count' => $count,
+                    'target_element' => $text,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
         $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
@@ -1808,14 +1813,14 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'text',
-                'type' => ElementGroup::class,
                 'options' => [
+                    'count' => $count,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
                     'target_element' => $text,
                     'template_placeholder' => 'template_counter',
-                    'count' => $count,
-                    'should_create_template' => true,
-                    'create_new_objects' => false,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1869,14 +1874,14 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'text',
-                'type' => ElementGroup::class,
                 'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
                     'target_element' => $text,
                     'template_placeholder' => 'template_counter',
-                    'count' => 0,
-                    'should_create_template' => true,
-                    'create_new_objects' => false,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1929,13 +1934,13 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'text',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'template_placeholder' => 'template_counter',
                     'count' => 2,
-                    'should_create_template' => true,
                     'create_new_objects' => false,
+                    'should_create_template' => true,
+                    'template_placeholder' => 'template_counter',
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -1982,34 +1987,34 @@ final class ElementGroupTest extends TestCase
         $form = new Form('test');
         $form->add(
             [
-                'name' => 'text',
-                'type' => ElementGroup::class,
                 'elements' => [
                     [
                         'spec' => [
-                            'type' => Element\Text::class,
                             'name' => 'text',
+                            'type' => Element\Text::class,
                         ],
                     ],
                     [
                         'spec' => [
-                            'type' => Element\DateSelect::class,
                             'name' => 'datesel',
+                            'type' => Element\DateSelect::class,
                         ],
                     ],
                     [
                         'spec' => [
-                            'type' => Element\DateTimeSelect::class,
                             'name' => 'datetimesel',
+                            'type' => Element\DateTimeSelect::class,
                         ],
                     ],
                     [
                         'spec' => [
-                            'type' => Element\Number::class,
                             'name' => 'num',
+                            'type' => Element\Number::class,
                         ],
                     ],
                 ],
+                'name' => 'text',
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -2057,11 +2062,11 @@ final class ElementGroupTest extends TestCase
         $form->add(
             [
                 'name' => 'collection',
-                'type' => ElementGroup::class,
                 'options' => [
-                    'target_element' => $mainFieldset,
                     'count' => 2,
+                    'target_element' => $mainFieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -2148,15 +2153,15 @@ final class ElementGroupTest extends TestCase
         $inputFilter->add(
             [
                 'name' => 'colors',
-                'type' => ArrayInput::class,
                 'required' => true,
+                'type' => ArrayInput::class,
             ],
         );
         $inputFilter->add(
             [
                 'name' => 'fieldsets',
-                'type' => ArrayInput::class,
                 'required' => true,
+                'type' => ArrayInput::class,
             ],
         );
 
@@ -2185,9 +2190,9 @@ final class ElementGroupTest extends TestCase
 
         $form->add(
             [
-                'type' => ElementGroup::class,
                 'name' => 'fieldsets',
                 'options' => ['count' => 2],
+                'type' => ElementGroup::class,
             ],
         );
 
@@ -2272,15 +2277,19 @@ final class ElementGroupTest extends TestCase
         $targetElement->setObject($obj1);
 
         $obj2 = new ArrayModel();
-        $obj2->exchangeArray(['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1']);
+        $obj2->exchangeArray(
+            ['bar' => 'bar_value_1', 'foo' => 'foo_value_1', 'foobar' => 'foobar_value_1'],
+        );
         $obj3 = new ArrayModel();
-        $obj3->exchangeArray(['foo' => 'foo_value_2', 'bar' => 'bar_value_2', 'foobar' => 'foobar_value_2']);
+        $obj3->exchangeArray(
+            ['bar' => 'bar_value_2', 'foo' => 'foo_value_2', 'foobar' => 'foobar_value_2'],
+        );
 
         $collection->setObject(new CustomTraversable([$obj2, $obj3]));
 
         $expected = [
-            ['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1'],
-            ['foo' => 'foo_value_2', 'bar' => 'bar_value_2', 'foobar' => 'foobar_value_2'],
+            ['bar' => 'bar_value_1', 'foo' => 'foo_value_1', 'foobar' => 'foobar_value_1'],
+            ['bar' => 'bar_value_2', 'foo' => 'foo_value_2', 'foobar' => 'foobar_value_2'],
         ];
 
         self::assertSame($expected, $collection->extract());
@@ -2324,9 +2333,13 @@ final class ElementGroupTest extends TestCase
     private function prepareForExtractWithCustomTraversable(FieldsetInterface $collection): void
     {
         $obj2 = new ArrayModel();
-        $obj2->exchangeArray(['foo' => 'foo_value_1', 'bar' => 'bar_value_1', 'foobar' => 'foobar_value_1']);
+        $obj2->exchangeArray(
+            ['bar' => 'bar_value_1', 'foo' => 'foo_value_1', 'foobar' => 'foobar_value_1'],
+        );
         $obj3 = new ArrayModel();
-        $obj3->exchangeArray(['foo' => 'foo_value_2', 'bar' => 'bar_value_2', 'foobar' => 'foobar_value_2']);
+        $obj3->exchangeArray(
+            ['bar' => 'bar_value_2', 'foo' => 'foo_value_2', 'foobar' => 'foobar_value_2'],
+        );
 
         $traversable = new CustomCollection();
         $traversable->append($obj2);

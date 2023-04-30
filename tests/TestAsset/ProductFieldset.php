@@ -30,35 +30,35 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
             ->setObject(new Entity\Product());
 
         $this->add([
+            'attributes' => ['required' => 'required'],
             'name' => 'name',
             'options' => ['label' => 'Name of the product'],
-            'attributes' => ['required' => 'required'],
         ]);
 
         $this->add([
+            'attributes' => ['required' => 'required'],
             'name' => 'price',
             'options' => ['label' => 'Price of the product'],
-            'attributes' => ['required' => 'required'],
         ]);
 
         $this->add([
-            'type' => ElementGroup::class,
             'name' => 'categories',
             'options' => [
-                'label' => 'Please choose categories for this product',
                 'count' => 2,
+                'label' => 'Please choose categories for this product',
                 'target_element' => [
                     'type' => CategoryFieldset::class,
                 ],
             ],
+            'type' => ElementGroup::class,
         ]);
 
         $this->add([
-            'type' => CountryFieldset::class,
+            'hydrator' => ClassMethodsHydrator::class,
             'name' => 'made_in_country',
             'object' => Entity\Country::class,
-            'hydrator' => ClassMethodsHydrator::class,
             'options' => ['label' => 'Please choose the country'],
+            'type' => CountryFieldset::class,
         ]);
     }
 
@@ -73,6 +73,7 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
     public function getInputFilterSpecification(): array
     {
         return [
+            'made_in_country' => ['required' => false],
             'name' => ['required' => true],
             'price' => [
                 'required' => true,
@@ -80,7 +81,6 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
                     ['name' => 'IsFloat'],
                 ],
             ],
-            'made_in_country' => ['required' => false],
         ];
     }
 }

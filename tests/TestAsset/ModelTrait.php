@@ -18,14 +18,9 @@ use function property_exists;
 
 trait ModelTrait
 {
-    /** @var mixed */
-    private $foo;
-
-    /** @var mixed */
-    private $bar;
-
-    /** @var mixed */
-    private $foobar;
+    private mixed $foo;
+    private mixed $bar;
+    private mixed $foobar;
 
     /**
      * @throws DomainException
@@ -37,12 +32,8 @@ trait ModelTrait
         throw new DomainException('Overloading to set values is not allowed');
     }
 
-    /**
-     * @return mixed
-     *
-     * @throws DomainException
-     */
-    public function __get(string $name)
+    /** @throws DomainException */
+    public function __get(string $name): mixed
     {
         if (property_exists($this, $name)) {
             return $this->{$name};
@@ -75,8 +66,8 @@ trait ModelTrait
     public function getArrayCopy(): array
     {
         return [
-            'foo' => $this->foo,
             'bar' => $this->bar,
+            'foo' => $this->foo,
             'foobar' => $this->foobar,
         ];
     }

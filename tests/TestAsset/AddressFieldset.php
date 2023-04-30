@@ -42,9 +42,9 @@ final class AddressFieldset extends Fieldset implements InputFilterProviderInter
         $phones->setLabel('Phone numbers')
             ->setOptions(
                 [
-                    'count' => 2,
                     'allow_add' => true,
                     'allow_remove' => true,
+                    'count' => 2,
                     'target_element' => new PhoneFieldset(),
                 ],
             );
