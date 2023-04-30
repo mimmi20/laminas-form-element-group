@@ -55,7 +55,7 @@ final class CustomTraversable implements Iterator
     /** @throws void */
     public function valid(): bool
     {
-        return null !== $this->key();
+        return $this->key() !== null;
     }
 
     /** @throws void */

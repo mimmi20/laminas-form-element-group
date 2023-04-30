@@ -29,24 +29,24 @@ final class FormCollection extends Form
         $element = new ColorElement('color');
         $this->add(
             [
-                'type' => ElementGroup::class,
                 'name' => 'colors',
                 'options' => [
                     'count' => 2,
                     'target_element' => $element,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
 
         $fieldset = new BasicFieldset();
         $this->add(
             [
-                'type' => ElementGroup::class,
                 'name' => 'fieldsets',
                 'options' => [
                     'count' => 2,
                     'target_element' => $fieldset,
                 ],
+                'type' => ElementGroup::class,
             ],
         );
     }

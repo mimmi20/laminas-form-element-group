@@ -50,8 +50,8 @@ final class CountryFieldset extends Fieldset implements InputFilterProviderInter
     public function getInputFilterSpecification(): array
     {
         return [
-            'name' => ['required' => true],
             'continent' => ['required' => true],
+            'name' => ['required' => true],
         ];
     }
 }

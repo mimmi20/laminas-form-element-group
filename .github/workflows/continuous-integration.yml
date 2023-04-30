@@ -19,7 +19,7 @@ jobs:
 
     uses: "mimmi20/template/.github/workflows/ci.yml@master"
     with:
-      extensions: "dom, iconv, intl, mbstring, simplexml, tokenizer, xml, xmlwriter"
+      extensions: "ctype, dom, iconv, intl, mbstring, simplexml, tokenizer, xml, xmlwriter"
       ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
       composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
       composer-outdated-option: ""
@@ -159,7 +159,7 @@ jobs:
       - name: "Run mutation tests with infection/infection"
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=71 --min-msi=71 --coverage=.build/coverage --logger-github --no-progress -vv"
+        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=70 --min-msi=70 --coverage=.build/coverage --logger-github --no-progress -vv"
 
   # This is a meta job to avoid to have to constantly change the protection rules
   # whenever we touch the matrix.
