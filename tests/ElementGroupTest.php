@@ -45,6 +45,8 @@ use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionProperty;
 use stdClass;
 
 use function assert;
@@ -86,7 +88,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCannotAllowNewElementsIfAllowAddIsFalse(): void
     {
         $form       = new FormCollection();
@@ -113,6 +117,9 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $this->expectException(DomainException::class);
         $this->expectExceptionCode(0);
         $this->expectExceptionMessage(
@@ -128,7 +135,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanAddNewElementsIfAllowAddIsTrue(): void
     {
         $form       = new FormCollection();
@@ -154,9 +163,15 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $data[] = 'orange';
         $collection->populateValues($data);
         self::assertCount(3, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -164,7 +179,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveElementsIfAllowRemoveIsTrue(): void
     {
         $form       = new FormCollection();
@@ -189,10 +206,16 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         unset($data[0]);
 
         $collection->populateValues($data);
         self::assertCount(1, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -200,7 +223,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanReplaceElementsIfAllowAddAndAllowRemoveIsTrue(): void
     {
         $form       = new FormCollection();
@@ -225,11 +250,17 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         unset($data[0]);
         $data[] = 'orange';
 
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -1959,7 +1990,9 @@ final class ElementGroupTest extends TestCase
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testPopulateValuesWithFirstKeyGreaterThanZero(): void
     {
         $inputData = [
@@ -2004,6 +2037,74 @@ final class ElementGroupTest extends TestCase
 
         self::assertCount(count($collection->getFieldsets()), $inputData);
         self::assertCount(count($formCollection->getFieldsets()), $inputData);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(5, $collLastIndex->getValue($collection));
+
+        $formcollLastIndex = new ReflectionProperty($formCollection, 'lastChildIndex');
+        self::assertSame(5, $formcollLastIndex->getValue($formCollection));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     */
+    #[Group('test-populate-values')]
+    public function testPopulateValuesWithFirstKeyGreaterThanZero2(): void
+    {
+        $inputData = [
+            0 => ['name' => 'green'],
+            7 => ['name' => 'red'],
+            1 => ['name' => 'black'],
+            5 => ['name' => 'white'],
+        ];
+
+        // Standalone Collection element
+        $collection = new ElementGroup(
+            'fieldsets',
+            [
+                'count' => 1,
+                'target_element' => new CategoryFieldset(),
+            ],
+        );
+
+        $form = new Form();
+        $form->add(
+            [
+                'name' => 'collection',
+                'options' => [
+                    'count' => 1,
+                    'target_element' => new CategoryFieldset(),
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        // Collection element attached to a form
+        $formCollection = $form->get('collection');
+        assert(
+            $formCollection instanceof ElementGroup,
+            sprintf(
+                '$formCollection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $formCollection::class,
+            ),
+        );
+
+        $collection->populateValues($inputData);
+        $formCollection->populateValues($inputData);
+
+        self::assertCount(count($collection->getFieldsets()), $inputData);
+        self::assertCount(count($formCollection->getFieldsets()), $inputData);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(7, $collLastIndex->getValue($collection));
+
+        $formcollLastIndex = new ReflectionProperty($formCollection, 'lastChildIndex');
+        self::assertSame(7, $formcollLastIndex->getValue($formCollection));
     }
 
     /**
@@ -2011,7 +2112,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveAllElementsIfAllowRemoveIsTrue(): void
     {
         $form       = new FormCollection();
@@ -2036,8 +2139,14 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $collection->populateValues([]);
         self::assertCount(0, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -3454,7 +3563,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveMultipleElements(): void
     {
         $form       = new FormCollection();
@@ -3478,16 +3589,24 @@ final class ElementGroupTest extends TestCase
 
         $collection->populateValues($data);
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
+
         $collection->populateValues(['colors' => ['0' => 'blue']]);
         self::assertCount(1, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
     }
 
     /**
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
     #[Group('removal-not-allowed')]
+    #[Group('test-populate-values')]
     public function testCanNotRemoveMultipleElements(): void
     {
         $form       = new FormCollection();
@@ -3510,6 +3629,9 @@ final class ElementGroupTest extends TestCase
         $data[] = 'red';
 
         $collection->populateValues($data);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
 
         $this->expectException(DomainException::class);
         $this->expectExceptionCode(0);
@@ -3603,7 +3725,9 @@ final class ElementGroupTest extends TestCase
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testPopulateValuesTraversable(): void
     {
         $data = new CustomTraversable(['blue', 'green']);
@@ -3624,6 +3748,9 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
 
         self::assertCount(2, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**

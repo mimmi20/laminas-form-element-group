@@ -110,7 +110,7 @@ final class ElementGroup extends Collection
         /**
          * Check to see if elements have been replaced or removed
          *
-         * @var array<int|string> $toRemove
+         * @var array<int, int|string> $toRemove
          */
         $toRemove = [];
 
@@ -205,17 +205,15 @@ final class ElementGroup extends Collection
             }
 
             // If the target element is a non-fieldset element, just use the value
-            if ($this->targetElement instanceof ElementInterface) {
-                $values[$key] = $value;
+            $values[$key] = $value;
 
-                if (!$this->createNewObjects() && $this->has((string) $key)) {
-                    $this->get((string) $key)->setValue($value);
-                }
-
+            if (!$this->targetElement instanceof ElementInterface) {
                 continue;
             }
 
-            $values[$key] = $value;
+            if (!$this->createNewObjects() && $this->has((string) $key)) {
+                $this->get((string) $key)->setValue($value);
+            }
         }
 
         return $values;
