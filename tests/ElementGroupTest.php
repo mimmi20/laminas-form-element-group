@@ -39,6 +39,7 @@ use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product;
 use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection;
+use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection2;
 use Mimmi20Test\Form\Element\Group\TestAsset\PhoneFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
 use PHPUnit\Framework\Attributes\Group;
@@ -1549,6 +1550,408 @@ final class ElementGroupTest extends TestCase
         $collection->setCreateNewObjects(false);
 
         self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject6(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color3');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection2();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets2(): void
+    {
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(false);
+        $mainFieldset1->expects(self::never())
+            ->method('setObject');
+        $mainFieldset1->expects(self::never())
+            ->method('extract');
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+
+        self::assertSame([], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets3(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets4(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs1');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets5(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs1');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(true);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets6(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs3');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets7(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::never())
+            ->method('getName');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $matcher       = self::exactly(2);
+        $mainFieldset1->expects($matcher)
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturnCallback(
+                /** @throws void */
+                static function (Element\Collection $object) use ($matcher, $mainFieldset2, $mainFieldset3): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($object, $mainFieldset2),
+                        default => self::assertSame($object, $mainFieldset3),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = [
+            'fs2' => $mainFieldset2,
+            'fs3' => $mainFieldset3,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs3' => $data], $collection->extract());
     }
 
     /**
