@@ -42,22 +42,26 @@ final class ElementGroup extends Collection
      */
     public function prepareElement(FormInterface $form): void
     {
-        if (
-            $this->shouldCreateChildrenOnPrepareElement
-            && $this->targetElement !== null
-            && $this->count > 0
-        ) {
-            while ($this->count > $this->lastChildIndex + 1) {
-                $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
+        $fieldCount = 0;
+
+        if ($this->targetElement !== null) {
+            if ($this->shouldCreateChildrenOnPrepareElement && $this->count >= 1) {
+                while ($this->count > $this->lastChildIndex + 1) {
+                    $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
+                }
             }
-        }
 
-        // Create a template that will also be prepared
-        if ($this->shouldCreateTemplate && $this->targetElement !== null) {
-            $templateElement = $this->getTemplateElement();
+            $fieldCount = $this->count();
 
-            if ($templateElement !== null) {
-                $this->add($templateElement);
+            // Create a template that will also be prepared
+            if ($this->shouldCreateTemplate) {
+                $templateElement = $this->getTemplateElement();
+
+                if ($templateElement !== null) {
+                    $this->add($templateElement);
+
+                    assert($fieldCount + 1 === $this->count());
+                }
             }
         }
 
@@ -77,6 +81,8 @@ final class ElementGroup extends Collection
         }
 
         $this->remove($this->templatePlaceholder);
+
+        assert($fieldCount === $this->count());
     }
 
     /**
