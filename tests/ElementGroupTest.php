@@ -1295,8 +1295,15 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
+        $mockHydrator = $this->createMock(HydratorInterface::class);
+        $mockHydrator->expects(self::exactly(2))
+            ->method('extract')
+            ->willReturnCallback(
+                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+            );
+
         // this test is using a hydrator set on the collection
-        $collection->setHydrator(new ArraySerializableHydrator());
+        $collection->setHydrator($mockHydrator);
 
         $this->prepareForExtractWithCustomTraversable($collection);
 
@@ -1339,7 +1346,14 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
-        $targetElement->setHydrator(new ArraySerializableHydrator());
+        $mockHydrator = $this->createMock(HydratorInterface::class);
+        $mockHydrator->expects(self::exactly(2))
+            ->method('extract')
+            ->willReturnCallback(
+                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+            );
+
+        $targetElement->setHydrator($mockHydrator);
         $obj1 = new ArrayModel();
         $targetElement->setObject($obj1);
 
@@ -1351,6 +1365,190 @@ final class ElementGroupTest extends TestCase
         ];
 
         self::assertSame($expected, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject2(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setObject($arrayCollection);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject3(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color1');
+        $color3->expects(self::once())
+            ->method('setValue')
+            ->with($color1);
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject4(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color1');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(true);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject5(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color3');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
     }
 
     /**
