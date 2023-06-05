@@ -950,8 +950,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractDefaultIsEmptyArray(): void
     {
         $form       = new FormCollection();
@@ -971,8 +971,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractThroughTargetElementHydrator(): void
     {
         $form       = new FormCollection();
@@ -999,8 +999,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject(): void
     {
         $form       = new FormCollection();
@@ -1028,8 +1028,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractThroughCustomHydrator(): void
     {
         $form       = new FormCollection();
@@ -1065,8 +1065,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversable(): void
     {
         $form       = new FormCollection();
@@ -1279,9 +1279,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws \DomainException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughCollectionHydrator(): void
     {
         $form       = new FormCollection();
@@ -1312,9 +1312,9 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws \DomainException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughTargetElementHydrator(): void
     {
         $form       = new FormCollection();
@@ -3027,7 +3027,6 @@ final class ElementGroupTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \DomainException

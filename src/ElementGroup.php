@@ -166,13 +166,10 @@ final class ElementGroup extends Collection
      * @return array<mixed>
      *
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function extract(): array
     {
-        if ($this->object instanceof Traversable) {
-            $this->object = ArrayUtils::iteratorToArray($this->object, false);
-        } elseif (!is_array($this->object)) {
+        if (!is_array($this->object)) {
             return [];
         }
 
