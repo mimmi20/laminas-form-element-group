@@ -44,10 +44,8 @@ final class ElementGroup extends Collection
     {
         if (
             $this->shouldCreateChildrenOnPrepareElement
-            && (
-                $this->targetElement !== null
-                && 0 < $this->count
-            )
+            && $this->targetElement !== null
+            && $this->count > 0
         ) {
             while ($this->count > $this->lastChildIndex + 1) {
                 $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
