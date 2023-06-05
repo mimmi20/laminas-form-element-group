@@ -42,24 +42,26 @@ final class ElementGroup extends Collection
      */
     public function prepareElement(FormInterface $form): void
     {
-        if (
-            $this->shouldCreateChildrenOnPrepareElement
-            && (
-                $this->targetElement !== null
-                && 0 < $this->count
-            )
-        ) {
-            while ($this->count > $this->lastChildIndex + 1) {
-                $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
+        $fieldCount = 0;
+
+        if ($this->targetElement !== null) {
+            if ($this->shouldCreateChildrenOnPrepareElement && $this->count >= 1) {
+                while ($this->count > $this->lastChildIndex + 1) {
+                    $this->addNewTargetElementInstance((string) ++$this->lastChildIndex);
+                }
             }
-        }
 
-        // Create a template that will also be prepared
-        if ($this->shouldCreateTemplate && $this->targetElement !== null) {
-            $templateElement = $this->getTemplateElement();
+            $fieldCount = $this->count();
 
-            if ($templateElement !== null) {
-                $this->add($templateElement);
+            // Create a template that will also be prepared
+            if ($this->shouldCreateTemplate) {
+                $templateElement = $this->getTemplateElement();
+
+                if ($templateElement !== null) {
+                    $this->add($templateElement);
+
+                    assert($fieldCount + 1 === $this->count());
+                }
             }
         }
 
@@ -79,6 +81,8 @@ final class ElementGroup extends Collection
         }
 
         $this->remove($this->templatePlaceholder);
+
+        assert($fieldCount === $this->count());
     }
 
     /**
@@ -106,7 +110,7 @@ final class ElementGroup extends Collection
         /**
          * Check to see if elements have been replaced or removed
          *
-         * @var array<int|string> $toRemove
+         * @var array<int, int|string> $toRemove
          */
         $toRemove = [];
 
@@ -162,13 +166,10 @@ final class ElementGroup extends Collection
      * @return array<mixed>
      *
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function extract(): array
     {
-        if ($this->object instanceof Traversable) {
-            $this->object = ArrayUtils::iteratorToArray($this->object, false);
-        } elseif (!is_array($this->object)) {
+        if (!is_array($this->object)) {
             return [];
         }
 
@@ -204,17 +205,15 @@ final class ElementGroup extends Collection
             }
 
             // If the target element is a non-fieldset element, just use the value
-            if ($this->targetElement instanceof ElementInterface) {
-                $values[$key] = $value;
+            $values[$key] = $value;
 
-                if (!$this->createNewObjects() && $this->has((string) $key)) {
-                    $this->get((string) $key)->setValue($value);
-                }
-
+            if (!$this->targetElement instanceof ElementInterface) {
                 continue;
             }
 
-            $values[$key] = $value;
+            if (!$this->createNewObjects() && $this->has((string) $key)) {
+                $this->get((string) $key)->setValue($value);
+            }
         }
 
         return $values;

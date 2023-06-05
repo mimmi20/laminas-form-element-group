@@ -39,11 +39,14 @@ use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Country;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Phone;
 use Mimmi20Test\Form\Element\Group\TestAsset\Entity\Product;
 use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection;
+use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection2;
 use Mimmi20Test\Form\Element\Group\TestAsset\PhoneFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionProperty;
 use stdClass;
 
 use function assert;
@@ -58,22 +61,14 @@ use function sprintf;
 
 final class ElementGroupTest extends TestCase
 {
-    private FormCollection $form;
-    private ProductFieldset $productFieldset;
-
-    /** @throws InvalidArgumentException */
-    protected function setUp(): void
-    {
-        $this->form            = new FormCollection();
-        $this->productFieldset = new ProductFieldset();
-
-        parent::setUp();
-    }
-
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function testCanRetrieveDefaultPlaceholder(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -92,10 +87,14 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCannotAllowNewElementsIfAllowAddIsFalse(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -118,7 +117,15 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are more elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_add option to true, or re-submit the form.',
+        );
+
         $data[] = 'orange';
         $collection->populateValues($data);
     }
@@ -127,10 +134,14 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanAddNewElementsIfAllowAddIsTrue(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -152,19 +163,29 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $data[] = 'orange';
         $collection->populateValues($data);
         self::assertCount(3, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
     }
 
     /**
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveElementsIfAllowRemoveIsTrue(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -185,20 +206,30 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         unset($data[0]);
 
         $collection->populateValues($data);
         self::assertCount(1, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanReplaceElementsIfAllowAddAndAllowRemoveIsTrue(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -219,11 +250,17 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         unset($data[0]);
         $data[] = 'orange';
 
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -233,7 +270,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCanValidateFormWithCollectionWithoutTemplate(): void
     {
-        $this->form->setData(
+        $form = new FormCollection();
+        $form->setData(
             [
                 'colors' => [
                     '#ffffff',
@@ -252,7 +290,7 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertTrue($this->form->isValid());
+        self::assertTrue($form->isValid());
     }
 
     /**
@@ -262,7 +300,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCannotValidateFormWithCollectionWithBadColor(): void
     {
-        $this->form->setData(
+        $form = new FormCollection();
+        $form->setData(
             [
                 'colors' => [
                     '#ffffff',
@@ -281,8 +320,8 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertFalse($this->form->isValid());
-        $messages = $this->form->getMessages();
+        self::assertFalse($form->isValid());
+        $messages = $form->getMessages();
 
         self::assertArrayHasKey('colors', $messages);
     }
@@ -294,7 +333,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCannotValidateFormWithCollectionWithBadFieldsetField(): void
     {
-        $this->form->setData(
+        $form = new FormCollection();
+        $form->setData(
             [
                 'colors' => [
                     '#ffffff',
@@ -313,8 +353,8 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertFalse($this->form->isValid());
-        $messages = $this->form->getMessages();
+        self::assertFalse($form->isValid());
+        $messages = $form->getMessages();
 
         self::assertCount(1, $messages);
         self::assertArrayHasKey('fieldsets', $messages);
@@ -327,7 +367,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCanValidateFormWithCollectionWithTemplate(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -344,7 +385,7 @@ final class ElementGroupTest extends TestCase
 
         $collection->setTemplatePlaceholder('__template__');
 
-        $this->form->setData(
+        $form->setData(
             [
                 'colors' => [
                     '#ffffff',
@@ -363,18 +404,15 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertTrue($this->form->isValid());
+        self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws DomainException
-     */
+    /** @throws InvalidArgumentException */
+    #[Group('removal-not-allowed')]
     public function testThrowExceptionIfThereAreLessElementsAndAllowRemoveNotAllowed(): void
     {
-        $this->expectException(DomainException::class);
-
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -387,7 +425,13 @@ final class ElementGroupTest extends TestCase
 
         $collection->setAllowRemove(false);
 
-        $this->form->setData(
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are fewer elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_remove option to true, or re-submit the form.',
+        );
+
+        $form->setData(
             [
                 'colors' => ['#ffffff'],
                 'fieldsets' => [
@@ -402,8 +446,43 @@ final class ElementGroupTest extends TestCase
                 ],
             ],
         );
+    }
 
-        $this->form->isValid();
+    /** @throws InvalidArgumentException */
+    #[Group('removal-not-allowed')]
+    public function testThrowExceptionIfThereAreLessElementsAndAllowRemoveNotAllowed2(): void
+    {
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setAllowRemove(false);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are fewer elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_remove option to true, or re-submit the form.',
+        );
+
+        $form->setData(
+            [
+                'colors' => ['#ffffff'],
+                'fieldsets' => [
+                    [
+                        'field' => 'oneValue',
+                        'nested_fieldset' => ['anotherField' => 'anotherValue'],
+                    ],
+                ],
+            ],
+        );
     }
 
     /**
@@ -413,7 +492,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testCanValidateLessThanSpecifiedCount(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -426,7 +506,7 @@ final class ElementGroupTest extends TestCase
 
         $collection->setAllowRemove(true);
 
-        $this->form->setData(
+        $form->setData(
             [
                 'colors' => ['#ffffff'],
                 'fieldsets' => [
@@ -442,7 +522,7 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        self::assertTrue($this->form->isValid());
+        self::assertTrue($form->isValid());
     }
 
     /**
@@ -451,7 +531,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testSetOptions(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -488,7 +569,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testSetOptionsTraversable(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -524,7 +606,8 @@ final class ElementGroupTest extends TestCase
     /** @throws InvalidArgumentException */
     public function testSetObjectNullRaisesException(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -536,13 +619,19 @@ final class ElementGroupTest extends TestCase
         );
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Laminas\Form\Element\Collection::setObject expects an array or Traversable object argument; received "NULL"',
+        );
+
         $collection->setObject(null);
     }
 
     /** @throws InvalidArgumentException */
     public function testSetTargetElementNullRaisesException(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -554,6 +643,11 @@ final class ElementGroupTest extends TestCase
         );
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Laminas\Form\Element\Collection::setTargetElement requires that $elementOrFieldset be an object implementing Laminas\Form\Element\ElementInterface; received "NULL"',
+        );
+
         $collection->setTargetElement(null);
     }
 
@@ -563,7 +657,8 @@ final class ElementGroupTest extends TestCase
      */
     public function testGetTargetElement(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -588,10 +683,13 @@ final class ElementGroupTest extends TestCase
     {
         $form = new Form();
         $form->setHydrator(new ClassMethodsHydrator());
-        $this->productFieldset->setUseAsBaseFieldset(true);
-        $form->add($this->productFieldset);
 
-        $collection = $this->productFieldset->get('categories');
+        $productFieldset = new ProductFieldset();
+        $productFieldset->setUseAsBaseFieldset(true);
+
+        $form->add($productFieldset);
+
+        $collection = $productFieldset->get('categories');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -651,8 +749,11 @@ final class ElementGroupTest extends TestCase
 
         $form = new Form();
         $form->setHydrator(new ClassMethodsHydrator());
-        $this->productFieldset->setUseAsBaseFieldset(true);
-        $form->add($this->productFieldset);
+
+        $productFieldset = new ProductFieldset();
+        $productFieldset->setUseAsBaseFieldset(true);
+
+        $form->add($productFieldset);
 
         $product = new Product();
         $product->setName('foo');
@@ -697,15 +798,17 @@ final class ElementGroupTest extends TestCase
             self::markTestSkipped('ext/intl not enabled');
         }
 
-        $this->productFieldset->setUseAsBaseFieldset(true);
-        $categories = $this->productFieldset->get('categories');
+        $productFieldset = new ProductFieldset();
+        $productFieldset->setUseAsBaseFieldset(true);
+
+        $categories = $productFieldset->get('categories');
         $categories->setOptions(
             ['create_new_objects' => true],
         );
 
         $form = new Form();
         $form->setHydrator(new ClassMethodsHydrator());
-        $form->add($this->productFieldset);
+        $form->add($productFieldset);
 
         $product = new Product();
         $product->setName('foo');
@@ -844,8 +947,11 @@ final class ElementGroupTest extends TestCase
     public function testDoNotCreateExtraFieldsetOnMultipleBind(): void
     {
         $form = new Form();
-        $this->productFieldset->setHydrator(new ClassMethodsHydrator());
-        $form->add($this->productFieldset);
+
+        $productFieldset = new ProductFieldset();
+        $productFieldset->setHydrator(new ClassMethodsHydrator());
+
+        $form->add($productFieldset);
         $form->setHydrator(new ObjectPropertyHydrator());
 
         $product    = new Product();
@@ -876,11 +982,12 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractDefaultIsEmptyArray(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -896,11 +1003,12 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractThroughTargetElementHydrator(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -923,11 +1031,12 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -951,11 +1060,12 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractThroughCustomHydrator(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -987,11 +1097,12 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversable(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -1200,12 +1311,13 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws \DomainException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughCollectionHydrator(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -1215,8 +1327,15 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
+        $mockHydrator = $this->createMock(HydratorInterface::class);
+        $mockHydrator->expects(self::exactly(2))
+            ->method('extract')
+            ->willReturnCallback(
+                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+            );
+
         // this test is using a hydrator set on the collection
-        $collection->setHydrator(new ArraySerializableHydrator());
+        $collection->setHydrator($mockHydrator);
 
         $this->prepareForExtractWithCustomTraversable($collection);
 
@@ -1232,12 +1351,13 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws DomainException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws \DomainException
      */
+    #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughTargetElementHydrator(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -1258,7 +1378,14 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
-        $targetElement->setHydrator(new ArraySerializableHydrator());
+        $mockHydrator = $this->createMock(HydratorInterface::class);
+        $mockHydrator->expects(self::exactly(2))
+            ->method('extract')
+            ->willReturnCallback(
+                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+            );
+
+        $targetElement->setHydrator($mockHydrator);
         $obj1 = new ArrayModel();
         $targetElement->setObject($obj1);
 
@@ -1275,9 +1402,597 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject2(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setObject($arrayCollection);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject3(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color1');
+        $color3->expects(self::once())
+            ->method('setValue')
+            ->with($color1);
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject4(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color1');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(true);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject5(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color3');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testExtractMaintainsTargetElementObject6(): void
+    {
+        $color1 = $this->createMock(Element\Color::class);
+        $color1->expects(self::never())
+            ->method('getName');
+        $color1->expects(self::never())
+            ->method('setValue');
+
+        $color2 = $this->createMock(Element\Color::class);
+        $color2->expects(self::never())
+            ->method('getName');
+        $color2->expects(self::never())
+            ->method('setValue');
+
+        $color3 = $this->createMock(Element\Color::class);
+        $color3->expects(self::once())
+            ->method('getName')
+            ->willReturn('color3');
+        $color3->expects(self::never())
+            ->method('setValue');
+
+        $arrayCollection = [
+            'color1' => $color1,
+            'color2' => $color2,
+        ];
+
+        $form       = new FormCollection2();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($color3);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame($arrayCollection, $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets2(): void
+    {
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(false);
+        $mainFieldset1->expects(self::never())
+            ->method('setObject');
+        $mainFieldset1->expects(self::never())
+            ->method('extract');
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+
+        self::assertSame([], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets3(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets4(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs1');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets5(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs1');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(true);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets6(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::once())
+            ->method('getName')
+            ->willReturn('fs3');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $mainFieldset1->expects(self::once())
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturn(true);
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = ['fs1' => $mainFieldset2];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->add($mainFieldset3);
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs1' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('test-extract')]
+    public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets7(): void
+    {
+        $data = ['xyz' => 'abc'];
+
+        $mainFieldset2 = $this->createMock(Element\Collection::class);
+        $mainFieldset2->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset2->expects(self::never())
+            ->method('setObject');
+        $mainFieldset2->expects(self::never())
+            ->method('extract');
+
+        $mainFieldset3 = $this->createMock(Element\Collection::class);
+        $mainFieldset3->expects(self::never())
+            ->method('allowObjectBinding');
+        $mainFieldset3->expects(self::never())
+            ->method('setObject');
+        $mainFieldset3->expects(self::never())
+            ->method('extract');
+        $mainFieldset3->expects(self::never())
+            ->method('getName');
+
+        $mainFieldset1 = $this->createMock(Element\Collection::class);
+        $matcher       = self::exactly(2);
+        $mainFieldset1->expects($matcher)
+            ->method('allowObjectBinding')
+            ->with($mainFieldset2)
+            ->willReturnCallback(
+                /** @throws void */
+                static function (Element\Collection $object) use ($matcher, $mainFieldset2, $mainFieldset3): bool {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame($object, $mainFieldset2),
+                        default => self::assertSame($object, $mainFieldset3),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => false,
+                        default => true,
+                    };
+                },
+            );
+        $mainFieldset1->expects(self::once())
+            ->method('setObject')
+            ->with($mainFieldset2);
+        $mainFieldset1->expects(self::once())
+            ->method('extract')
+            ->willReturn($data);
+
+        $arrayCollection = [
+            'fs2' => $mainFieldset2,
+            'fs3' => $mainFieldset3,
+        ];
+
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setTargetElement($mainFieldset1);
+        $collection->setObject($arrayCollection);
+        $collection->setCreateNewObjects(false);
+
+        self::assertSame(['fs3' => $data], $collection->extract());
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testPopulateValuesWithFirstKeyGreaterThanZero(): void
     {
         $inputData = [
@@ -1322,16 +2037,88 @@ final class ElementGroupTest extends TestCase
 
         self::assertCount(count($collection->getFieldsets()), $inputData);
         self::assertCount(count($formCollection->getFieldsets()), $inputData);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(5, $collLastIndex->getValue($collection));
+
+        $formcollLastIndex = new ReflectionProperty($formCollection, 'lastChildIndex');
+        self::assertSame(5, $formcollLastIndex->getValue($formCollection));
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws ReflectionException
+     */
+    #[Group('test-populate-values')]
+    public function testPopulateValuesWithFirstKeyGreaterThanZero2(): void
+    {
+        $inputData = [
+            0 => ['name' => 'green'],
+            7 => ['name' => 'red'],
+            1 => ['name' => 'black'],
+            5 => ['name' => 'white'],
+        ];
+
+        // Standalone Collection element
+        $collection = new ElementGroup(
+            'fieldsets',
+            [
+                'count' => 1,
+                'target_element' => new CategoryFieldset(),
+            ],
+        );
+
+        $form = new Form();
+        $form->add(
+            [
+                'name' => 'collection',
+                'options' => [
+                    'count' => 1,
+                    'target_element' => new CategoryFieldset(),
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        // Collection element attached to a form
+        $formCollection = $form->get('collection');
+        assert(
+            $formCollection instanceof ElementGroup,
+            sprintf(
+                '$formCollection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $formCollection::class,
+            ),
+        );
+
+        $collection->populateValues($inputData);
+        $formCollection->populateValues($inputData);
+
+        self::assertCount(count($collection->getFieldsets()), $inputData);
+        self::assertCount(count($formCollection->getFieldsets()), $inputData);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(7, $collLastIndex->getValue($collection));
+
+        $formcollLastIndex = new ReflectionProperty($formCollection, 'lastChildIndex');
+        self::assertSame(7, $formcollLastIndex->getValue($formCollection));
     }
 
     /**
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveAllElementsIfAllowRemoveIsTrue(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -1352,8 +2139,14 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
         self::assertCount(2, $collection->getElements());
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
+
         $collection->populateValues([]);
         self::assertCount(0, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**
@@ -1609,15 +2402,18 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      */
+    #[Group('prepare-count')]
     public function testSettingSomeDataButNoneForCollectionReturnsSpecifiedNumberOfElementsAfterPrepare(): void
     {
+        $count = 2;
+
         $form = new Form();
         $form->add(new Element\Text('input'));
         $form->add(
             [
                 'name' => 'names',
                 'options' => [
-                    'count' => 2,
+                    'count' => $count,
                     'target_element' => new Element\Text(),
                 ],
                 'type' => ElementGroup::class,
@@ -1654,7 +2450,117 @@ final class ElementGroupTest extends TestCase
             ),
         );
 
-        self::assertCount(2, $collection2);
+        self::assertCount($count, $collection2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('prepare-count')]
+    public function testSettingSomeDataButNoneForCollectionReturnsSpecifiedNumberOfElementsAfterPrepare2(): void
+    {
+        $count = 0;
+
+        $form = new Form();
+        $form->add(new Element\Text('input'));
+        $form->add(
+            [
+                'name' => 'names',
+                'options' => [
+                    'count' => $count,
+                    'target_element' => new Element\Text(),
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $form->setData(
+            ['input' => 'foo'],
+        );
+
+        $collection1 = $form->get('names');
+
+        assert(
+            $collection1 instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection1::class,
+            ),
+        );
+
+        self::assertCount(0, $collection1);
+
+        $form->prepare();
+
+        $collection2 = $form->get('names');
+
+        assert(
+            $collection2 instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection2::class,
+            ),
+        );
+
+        self::assertCount($count, $collection2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('prepare-count')]
+    public function testSettingSomeDataButNoneForCollectionReturnsSpecifiedNumberOfElementsAfterPrepare3(): void
+    {
+        $count = 1;
+
+        $form = new Form();
+        $form->add(new Element\Text('input'));
+        $form->add(
+            [
+                'name' => 'names',
+                'options' => [
+                    'count' => $count,
+                    'target_element' => new Element\Text(),
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $form->setData(
+            ['input' => 'foo'],
+        );
+
+        $collection1 = $form->get('names');
+
+        assert(
+            $collection1 instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection1::class,
+            ),
+        );
+
+        self::assertCount(0, $collection1);
+
+        $form->prepare();
+
+        $collection2 = $form->get('names');
+
+        assert(
+            $collection2 instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection2::class,
+            ),
+        );
+
+        self::assertCount($count, $collection2);
     }
 
     /**
@@ -1668,7 +2574,8 @@ final class ElementGroupTest extends TestCase
             new Element\Color(),
         ];
 
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -1805,11 +2712,13 @@ final class ElementGroupTest extends TestCase
     #[Group('issue-6263')]
     #[Group('issue-6518')]
     #[Group('test-3')]
+    #[Group('prepare-template-element')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface3(): void
     {
         $count = 2;
-        $form  = new Form('test');
-        $text  = new Element\DateSelect('text');
+
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
         $form->add(
             [
                 'name' => 'text',
@@ -1848,6 +2757,40 @@ final class ElementGroupTest extends TestCase
 
         $fieldset = $form->get('text');
         self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount($count, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount($count, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
 
         $elements2 = $fieldset->getElements();
         self::assertIsArray($elements2);
@@ -1867,6 +2810,7 @@ final class ElementGroupTest extends TestCase
     #[Group('issue-6263')]
     #[Group('issue-6518')]
     #[Group('test-4')]
+    #[Group('prepare-template-element')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface4(): void
     {
         $form = new Form('test');
@@ -1909,6 +2853,40 @@ final class ElementGroupTest extends TestCase
 
         $fieldset = $form->get('text');
         self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
 
         $elements2 = $fieldset->getElements();
         self::assertIsArray($elements2);
@@ -1982,6 +2960,7 @@ final class ElementGroupTest extends TestCase
     #[Group('issue-6263')]
     #[Group('issue-6518')]
     #[Group('test-3')]
+    #[Group('prepare-child-elements')]
     public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface6(): void
     {
         $form = new Form('test');
@@ -2030,6 +3009,476 @@ final class ElementGroupTest extends TestCase
 
         $fieldset = $form->get('text');
         self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(4, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(4, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
+    #[Group('prepare-template-element')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface7(): void
+    {
+        $count = 2;
+
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount($count, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount($count, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-4')]
+    #[Group('prepare-template-element')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface8(): void
+    {
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface9(): void
+    {
+        $form = new Form('test');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(0, $result['text']);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(0, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-4')]
+    #[Group('prepare-template-element')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface10(): void
+    {
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => false,
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-4')]
+    #[Group('prepare-template-element')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface11(): void
+    {
+        $form = new Form('test');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => true,
+                    'target_element' => null,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(0, $result['text']);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(0, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(0, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws DomainException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-4')]
+    #[Group('prepare-template-element')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface12(): void
+    {
+        $form = new Form('test');
+        $text = new Element\DateSelect('text');
+        $form->add(
+            [
+                'name' => 'text',
+                'options' => [
+                    'count' => 0,
+                    'create_new_objects' => false,
+                    'should_create_template' => false,
+                    'target_element' => $text,
+                    'template_placeholder' => 'template_counter',
+                ],
+                'type' => ElementGroup::class,
+            ],
+        );
+
+        $object = new ArrayObject(['text' => ['2020-01-01', '2021-01-01']]);
+        $form->bind($object);
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+
+        $form->prepare();
+        self::assertTrue($form->isValid());
+
+        $result = $form->getData();
+        self::assertInstanceOf(ArrayAccess::class, $result);
+        self::assertIsArray($result['text']);
+        self::assertCount(2, $result['text']);
+        self::assertArrayHasKey(0, $result['text']);
+        self::assertSame('2020-01-01', $result['text'][0]);
+        self::assertArrayHasKey(1, $result['text']);
+        self::assertSame('2021-01-01', $result['text'][1]);
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(2, $fieldset);
+
+        $elements2 = $fieldset->getElements();
+        self::assertIsArray($elements2);
+        self::assertCount(2, $elements2);
+        self::assertContainsOnlyInstancesOf(Element\DateSelect::class, $elements2);
+
+        $fieldsets2 = $fieldset->getFieldsets();
+        self::assertIsArray($fieldsets2);
+        self::assertCount(0, $fieldsets2);
+    }
+
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    #[Group('issue-6263')]
+    #[Group('issue-6518')]
+    #[Group('test-3')]
+    #[Group('prepare-child-elements')]
+    public function testCollectionProperlyHandlesAddingObjectsOfTypeElementInterface13(): void
+    {
+        $form = new Form('test');
+
+        $textField = $this->createMock(Element\Text::class);
+        $textField->expects(self::once())
+            ->method('getName')
+            ->willReturn('text-field');
+
+        $dateselectField = $this->createMock(Element\DateSelect::class);
+        $dateselectField->expects(self::once())
+            ->method('prepareElement')
+            ->with($form);
+        $dateselectField->expects(self::once())
+            ->method('getName')
+            ->willReturn('date-select-field');
+
+        $datetimeselectField = $this->createMock(Element\DateTimeSelect::class);
+        $datetimeselectField->expects(self::once())
+            ->method('prepareElement')
+            ->with($form);
+        $datetimeselectField->expects(self::once())
+            ->method('getName')
+            ->willReturn('datetime-select-field');
+
+        $numberField = $this->createMock(Element\Number::class);
+        $numberField->expects(self::once())
+            ->method('getName')
+            ->willReturn('number-field');
+
+        $elementGroup = new ElementGroup();
+        $elementGroup->setName('text');
+        $elementGroup->add($textField);
+        $elementGroup->add($dateselectField);
+        $elementGroup->add($datetimeselectField);
+        $elementGroup->add($numberField);
+
+        $form->add($elementGroup);
+        $form->prepare();
+
+        $elements = $form->getElements();
+        self::assertIsArray($elements);
+        self::assertCount(0, $elements);
+
+        $fieldsets = $form->getFieldsets();
+        self::assertIsArray($fieldsets);
+        self::assertCount(1, $fieldsets);
+
+        $fieldset = $form->get('text');
+        self::assertInstanceOf(ElementGroup::class, $fieldset);
+        self::assertCount(4, $fieldset);
 
         $elements2 = $fieldset->getElements();
         self::assertIsArray($elements2);
@@ -2096,7 +3545,7 @@ final class ElementGroupTest extends TestCase
     public function testCanHydrateObject(): void
     {
         $color  = '#ffffff';
-        $form   = $this->form;
+        $form   = new FormCollection();
         $object = new ArrayObject();
         $form->bind($object);
         $data = [
@@ -2113,10 +3562,14 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testCanRemoveMultipleElements(): void
     {
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
@@ -2136,8 +3589,57 @@ final class ElementGroupTest extends TestCase
 
         $collection->populateValues($data);
 
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
+
         $collection->populateValues(['colors' => ['0' => 'blue']]);
         self::assertCount(1, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
+    }
+
+    /**
+     * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    #[Group('removal-not-allowed')]
+    #[Group('test-populate-values')]
+    public function testCanNotRemoveMultipleElements(): void
+    {
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setAllowRemove(false);
+        $collection->setCount(0);
+
+        $data   = [];
+        $data[] = 'blue';
+        $data[] = 'green';
+        $data[] = 'red';
+
+        $collection->populateValues($data);
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(2, $collLastIndex->getValue($collection));
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Elements have been removed from the collection (Mimmi20\Form\Element\Group\ElementGroup) but the allow_remove option is not true.',
+        );
+
+        $collection->populateValues(['colors' => ['0' => 'blue']]);
     }
 
     /**
@@ -2148,8 +3650,10 @@ final class ElementGroupTest extends TestCase
      */
     public function testGetErrorMessagesForInvalidCollectionElements(): void
     {
+        $form = new FormCollection();
+
         // Configure InputFilter
-        $inputFilter = $this->form->getInputFilter();
+        $inputFilter = $form->getInputFilter();
         $inputFilter->add(
             [
                 'name' => 'colors',
@@ -2165,15 +3669,15 @@ final class ElementGroupTest extends TestCase
             ],
         );
 
-        $this->form->setData([]);
-        $this->form->isValid();
+        $form->setData([]);
+        $form->isValid();
 
         self::assertSame(
             [
                 'colors' => ['isEmpty' => 'Value is required and can\'t be empty'],
                 'fieldsets' => ['isEmpty' => 'Value is required and can\'t be empty'],
             ],
-            $this->form->getMessages(),
+            $form->getMessages(),
         );
     }
 
@@ -2220,12 +3724,16 @@ final class ElementGroupTest extends TestCase
      * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
+    #[Group('test-populate-values')]
     public function testPopulateValuesTraversable(): void
     {
         $data = new CustomTraversable(['blue', 'green']);
 
-        $collection = $this->form->get('colors');
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
 
         assert(
             $collection instanceof ElementGroup,
@@ -2240,18 +3748,21 @@ final class ElementGroupTest extends TestCase
         $collection->populateValues($data);
 
         self::assertCount(2, $collection->getElements());
+
+        $collLastIndex = new ReflectionProperty($collection, 'lastChildIndex');
+        self::assertSame(1, $collLastIndex->getValue($collection));
     }
 
     /**
      * @throws Exception
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \DomainException
      */
     public function testSetObjectTraversable(): void
     {
-        $collection = $this->form->get('fieldsets');
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
         assert(
             $collection instanceof ElementGroup,
             sprintf(
