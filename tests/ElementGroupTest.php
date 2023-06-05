@@ -113,6 +113,11 @@ final class ElementGroupTest extends TestCase
         self::assertCount(2, $collection->getElements());
 
         $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are more elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_add option to true, or re-submit the form.',
+        );
+
         $data[] = 'orange';
         $collection->populateValues($data);
     }
@@ -370,14 +375,10 @@ final class ElementGroupTest extends TestCase
         self::assertTrue($form->isValid());
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @throws DomainException
-     */
+    /** @throws InvalidArgumentException */
+    #[Group('removal-not-allowed')]
     public function testThrowExceptionIfThereAreLessElementsAndAllowRemoveNotAllowed(): void
     {
-        $this->expectException(DomainException::class);
-
         $form       = new FormCollection();
         $collection = $form->get('colors');
 
@@ -391,6 +392,12 @@ final class ElementGroupTest extends TestCase
         );
 
         $collection->setAllowRemove(false);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are fewer elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_remove option to true, or re-submit the form.',
+        );
 
         $form->setData(
             [
@@ -407,8 +414,43 @@ final class ElementGroupTest extends TestCase
                 ],
             ],
         );
+    }
 
-        $form->isValid();
+    /** @throws InvalidArgumentException */
+    #[Group('removal-not-allowed')]
+    public function testThrowExceptionIfThereAreLessElementsAndAllowRemoveNotAllowed2(): void
+    {
+        $form       = new FormCollection();
+        $collection = $form->get('fieldsets');
+
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setAllowRemove(false);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'There are fewer elements than specified in the collection (Mimmi20\Form\Element\Group\ElementGroup). Either set the allow_remove option to true, or re-submit the form.',
+        );
+
+        $form->setData(
+            [
+                'colors' => ['#ffffff'],
+                'fieldsets' => [
+                    [
+                        'field' => 'oneValue',
+                        'nested_fieldset' => ['anotherField' => 'anotherValue'],
+                    ],
+                ],
+            ],
+        );
     }
 
     /**
@@ -545,6 +587,11 @@ final class ElementGroupTest extends TestCase
         );
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Laminas\Form\Element\Collection::setObject expects an array or Traversable object argument; received "NULL"',
+        );
+
         $collection->setObject(null);
     }
 
@@ -564,6 +611,11 @@ final class ElementGroupTest extends TestCase
         );
 
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Laminas\Form\Element\Collection::setTargetElement requires that $elementOrFieldset be an object implementing Laminas\Form\Element\ElementInterface; received "NULL"',
+        );
+
         $collection->setTargetElement(null);
     }
 
@@ -2827,6 +2879,44 @@ final class ElementGroupTest extends TestCase
 
         $collection->populateValues(['colors' => ['0' => 'blue']]);
         self::assertCount(1, $collection->getElements());
+    }
+
+    /**
+     * @throws DomainException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
+     */
+    #[Group('removal-not-allowed')]
+    public function testCanNotRemoveMultipleElements(): void
+    {
+        $form       = new FormCollection();
+        $collection = $form->get('colors');
+        assert(
+            $collection instanceof ElementGroup,
+            sprintf(
+                '$collection should be an Instance of %s, but was %s',
+                ElementGroup::class,
+                $collection::class,
+            ),
+        );
+
+        $collection->setAllowRemove(false);
+        $collection->setCount(0);
+
+        $data   = [];
+        $data[] = 'blue';
+        $data[] = 'green';
+        $data[] = 'red';
+
+        $collection->populateValues($data);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage(
+            'Elements have been removed from the collection (Mimmi20\Form\Element\Group\ElementGroup) but the allow_remove option is not true.',
+        );
+
+        $collection->populateValues(['colors' => ['0' => 'blue']]);
     }
 
     /**
