@@ -18,6 +18,7 @@ use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -48,4 +49,10 @@ return static function (RectorConfig $rectorConfig): void {
             CountOnNullRector::class,
         ],
     );
+
+    $rectorConfig->skip([
+        ReadOnlyPropertyRector::class => [
+            __DIR__ . '/tests/TestAsset/CustomTraversable.php',
+        ],
+    ]);
 };

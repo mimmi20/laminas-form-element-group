@@ -28,6 +28,7 @@ final class CustomTraversable implements Iterator
      */
     public function __construct(private array $data)
     {
+        // nothing to do
     }
 
     /** @throws void */
