@@ -29,7 +29,7 @@
     "ext-tokenizer": "*",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
-    "infection/infection": "^0.27.3",
+    "infection/infection": "^0.27.5",
     "laminas/laminas-i18n": "^2.23.0",
     "laminas/laminas-modulemanager": "^2.14.0",
     "laminas/laminas-validator": "^2.39.0",
