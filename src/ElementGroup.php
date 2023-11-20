@@ -30,6 +30,7 @@ use function is_array;
 use function is_countable;
 use function is_int;
 use function is_iterable;
+use function is_scalar;
 use function sprintf;
 
 final class ElementGroup extends Collection
@@ -152,7 +153,7 @@ final class ElementGroup extends Collection
                 continue;
             }
 
-            if ($elementOrFieldset !== null) {
+            if ($elementOrFieldset !== null && (is_scalar($value) || $value === null)) {
                 $elementOrFieldset->setAttribute('value', $value);
             }
         }
