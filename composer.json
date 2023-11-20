@@ -17,7 +17,7 @@
   },
   "require": {
     "php": "^8.1.0",
-    "laminas/laminas-form": "^3.15.0",
+    "laminas/laminas-form": "^3.16.0",
     "laminas/laminas-hydrator": "^4.15.0",
     "laminas/laminas-inputfilter": "^2.28.0"
   },
