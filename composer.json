@@ -16,7 +16,7 @@
     "source": "https://github.com/mimmi20/laminas-form-element-group"
   },
   "require": {
-    "php": "^8.1.0",
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
     "laminas/laminas-form": "^3.19.2",
     "laminas/laminas-hydrator": "^4.15.0",
     "laminas/laminas-stdlib": "^3.19.0"
