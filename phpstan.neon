@@ -123,7 +123,6 @@ parameters:
     - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
 #    - '~is not subtype of Throwable~'
     - '~Call to static method PHPUnit\\Framework\\Assert::assert.*\(\) with .* will always evaluate to true~'
-    - '~is used in multiple traits. Make it unique to avoid conflicts~'
 
 rules:
   # code complexity
