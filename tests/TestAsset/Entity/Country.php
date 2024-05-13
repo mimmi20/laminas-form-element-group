@@ -18,9 +18,9 @@ final class Country
     private string $continent = '';
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setName(string $name): self
     {
@@ -29,16 +29,20 @@ final class Country
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setContinent(string $continent): self
     {
@@ -47,7 +51,11 @@ final class Country
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getContinent(): string
     {
         return $this->continent;

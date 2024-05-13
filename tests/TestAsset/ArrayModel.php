@@ -20,6 +20,8 @@ final class ArrayModel
      * @return array<string, mixed>
      *
      * @throws void
+     *
+     * @api
      */
     public function toArray(): array
     {

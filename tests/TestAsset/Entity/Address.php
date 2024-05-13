@@ -21,9 +21,9 @@ final class Address
     private array $phones = [];
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setStreet(string $street): self
     {
@@ -32,16 +32,20 @@ final class Address
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getStreet(): string
     {
         return $this->street;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setCity(City $city): self
     {
@@ -50,7 +54,11 @@ final class Address
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getCity(): City | null
     {
         return $this->city;
@@ -60,6 +68,8 @@ final class Address
      * @param array<int|string, Phone> $phones
      *
      * @throws void
+     *
+     * @api
      */
     public function setPhones(array $phones): self
     {
@@ -72,6 +82,8 @@ final class Address
      * @return array<int|string, Phone>
      *
      * @throws void
+     *
+     * @api
      */
     public function getPhones(): array
     {

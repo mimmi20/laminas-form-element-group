@@ -18,9 +18,9 @@ final class Category
     private string $name = '';
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setName(string $name): self
     {
@@ -29,16 +29,20 @@ final class Category
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setId(int $id): self
     {
@@ -47,7 +51,11 @@ final class Category
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getId(): int
     {
         return $this->id;

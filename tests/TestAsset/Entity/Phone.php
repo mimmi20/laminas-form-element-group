@@ -17,9 +17,9 @@ final class Phone
     private string $number = '';
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setNumber(string $number): self
     {
@@ -28,7 +28,11 @@ final class Phone
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getNumber(): string
     {
         return $this->number;

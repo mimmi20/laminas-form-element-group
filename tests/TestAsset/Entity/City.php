@@ -19,9 +19,9 @@ final class City
     private Country $country;
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setCountry(Country $country): self
     {
@@ -30,16 +30,20 @@ final class City
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getCountry(): Country
     {
         return $this->country;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setName(string $name): self
     {
@@ -48,16 +52,20 @@ final class City
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setZipCode(string $zipCode): self
     {
@@ -66,7 +74,11 @@ final class City
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getZipCode(): string
     {
         return $this->zipCode;
