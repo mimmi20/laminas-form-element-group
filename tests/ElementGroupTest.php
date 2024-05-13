@@ -1081,7 +1081,7 @@ final class ElementGroupTest extends TestCase
         $mockHydrator->expects(self::exactly(2))
             ->method('extract')
             ->willReturnCallback(
-                static fn ($object) => ['value' => $object->field . '_foo'],
+                static fn (stdClass $object) => ['value' => $object->field . '_foo'],
             );
 
         $collection->setHydrator($mockHydrator);
@@ -1331,7 +1331,7 @@ final class ElementGroupTest extends TestCase
         $mockHydrator->expects(self::exactly(2))
             ->method('extract')
             ->willReturnCallback(
-                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+                static fn (stdClass $object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
             );
 
         // this test is using a hydrator set on the collection
@@ -1382,7 +1382,7 @@ final class ElementGroupTest extends TestCase
         $mockHydrator->expects(self::exactly(2))
             ->method('extract')
             ->willReturnCallback(
-                static fn ($object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
+                static fn (stdClass $object) => ['bar' => $object->bar, 'foo' => $object->foo, 'foobar' => $object->foobar],
             );
 
         $targetElement->setHydrator($mockHydrator);

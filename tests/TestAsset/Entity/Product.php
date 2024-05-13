@@ -29,6 +29,8 @@ final class Product
      * @param array<int, Category> $categories
      *
      * @throws void
+     *
+     * @api
      */
     public function setCategories(array $categories): self
     {
@@ -41,6 +43,8 @@ final class Product
      * @return array<int, Category>
      *
      * @throws void
+     *
+     * @api
      */
     public function getCategories(): array
     {
@@ -48,9 +52,9 @@ final class Product
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setName(string $name): self
     {
@@ -59,16 +63,20 @@ final class Product
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return $this
-     *
      * @throws void
+     *
+     * @api
      */
     public function setPrice(int $price): self
     {
@@ -77,7 +85,11 @@ final class Product
         return $this;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getPrice(): int
     {
         return $this->price;
@@ -87,6 +99,8 @@ final class Product
      * Return category from index
      *
      * @throws void
+     *
+     * @api
      */
     public function getCategory(int $i): Category
     {
@@ -99,6 +113,8 @@ final class Product
      * @phpstan-return array{name: string, price: int, categories: array<int, Category>, madeInCountry: Country|null}
      *
      * @throws void
+     *
+     * @api
      */
     public function getArrayCopy(): array
     {
@@ -110,13 +126,21 @@ final class Product
         return $vars;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function getMadeInCountry(): Country | null
     {
         return $this->madeInCountry;
     }
 
-    /** @throws void */
+    /**
+     * @throws void
+     *
+     * @api
+     */
     public function setMadeInCountry(Country $country): void
     {
         $this->madeInCountry = $country;

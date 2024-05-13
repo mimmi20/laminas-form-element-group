@@ -20,6 +20,8 @@ final class CustomCollection extends ArrayObject
      * @return array<int|string, array<int|string, mixed>>
      *
      * @throws void
+     *
+     * @api
      */
     public function toArray(): array
     {
