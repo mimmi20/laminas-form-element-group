@@ -14,9 +14,7 @@ namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 use Laminas\Stdlib\ArrayObject;
 
-/**
- * @extends ArrayObject<int|string, mixed>
- */
+/** @extends ArrayObject<int|string, mixed> */
 final class CustomCollection extends ArrayObject
 {
     /**

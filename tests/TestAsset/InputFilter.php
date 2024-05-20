@@ -14,9 +14,7 @@ namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 use Laminas\InputFilter\InputFilter as InputFilterBase;
 
-/**
- * @extends InputFilterBase<mixed>
- */
+/** @extends InputFilterBase<mixed> */
 final class InputFilter extends InputFilterBase
 {
 }
