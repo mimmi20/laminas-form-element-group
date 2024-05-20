@@ -19,6 +19,9 @@ use function key;
 use function next;
 use function reset;
 
+/**
+ * @implements Iterator<int|string, mixed>
+ */
 final class CustomTraversable implements Iterator
 {
     /**
