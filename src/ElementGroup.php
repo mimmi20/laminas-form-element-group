@@ -38,6 +38,8 @@ final class ElementGroup extends Collection
     /**
      * Ensures state is ready for use.
      *
+     * @param FormInterface<mixed> $form
+     *
      * @throws InvalidArgumentException
      * @throws DomainException
      */

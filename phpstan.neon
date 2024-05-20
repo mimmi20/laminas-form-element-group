@@ -35,9 +35,6 @@ parameters:
   # reports function and method calls with incorrect name case
   checkFunctionNameCase: true
 
-  # it requires type variables always be specified in typehints
-  checkGenericClassInNonGenericObjectType: false
-
   # be strict about values with an unspecified (implicit mixed) type
   checkImplicitMixed: false
 
@@ -130,12 +127,9 @@ rules:
   # code complexity
   # - Symplify\PHPStanRules\Rules\Explicit\NoMixedPropertyFetcherRule
   # - Symplify\PHPStanRules\Rules\Explicit\NoMixedMethodCallerRule
-  - Symplify\PHPStanRules\Rules\Enum\RequireEnumDocBlockOnConstantListPassRule
   # - Symplify\PHPStanRules\Rules\NoDynamicNameRule
-  - Symplify\PHPStanRules\Rules\Explicit\NoRelativeFilePathRule
   # - Symplify\PHPStanRules\Rules\NoReturnArrayVariableListRule # todo: fix
 
-  - Symplify\PHPStanRules\Rules\NoProtectedClassElementRule
   - Symplify\PHPStanRules\Rules\ForbiddenExtendOfNonAbstractClassRule
   - Symplify\PHPStanRules\Rules\Complexity\ForbiddenSameNamedNewInstanceRule
 
@@ -153,7 +147,6 @@ rules:
   # - Symplify\PHPStanRules\Rules\NoArrayAccessOnObjectRule
 
   - Symplify\PHPStanRules\Rules\NoNullableArrayPropertyRule
-  - Symplify\PHPStanRules\Rules\BoolishClassMethodPrefixRule
 
   # dead-code
   - Symplify\PHPStanRules\Rules\NoIssetOnObjectRule

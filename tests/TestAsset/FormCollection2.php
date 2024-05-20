@@ -16,6 +16,7 @@ use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\Form;
 use Mimmi20\Form\Element\Group\ElementGroup;
 
+/** @extends Form<mixed> */
 final class FormCollection2 extends Form
 {
     /** @throws InvalidArgumentException */
