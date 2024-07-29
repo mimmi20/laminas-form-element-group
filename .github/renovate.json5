@@ -7,7 +7,7 @@
     ":combinePatchMinorReleases",
     ":disableDependencyDashboard",
     ":disableRateLimiting",
-    ":enableRenovate",
+    ":disableRenovate",
     ":enableVulnerabilityAlertsWithLabel(security)",
     ":gitSignOff",
     ":ignoreUnstable",
@@ -43,6 +43,7 @@
     "Change": "[{{#if displayFrom}}`{{{displayFrom}}}` -> {{else}}{{#if currentValue}}`{{{currentValue}}}` -> {{/if}}{{/if}}{{#if displayTo}}`{{{displayTo}}}`{{else}}`{{{newValue}}}`{{/if}}]({{#if depName}}https://renovatebot.com/diffs/npm/{{replace '/' '%2f' depName}}/{{{currentVersion}}}/{{{newVersion}}}{{/if}})"
   },
   "rangeStrategy": "bump",
+  "recreateWhen": "never",
   "rollbackPrs": true,
   "schedule": ["before 4am on Monday"],
   "packageRules": [
