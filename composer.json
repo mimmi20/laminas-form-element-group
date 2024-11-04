@@ -19,7 +19,7 @@
     "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
     "laminas/laminas-form": "^3.21.0",
     "laminas/laminas-hydrator": "^4.15.0",
-    "laminas/laminas-stdlib": "^3.19.0"
+    "laminas/laminas-stdlib": "^3.20.0"
   },
   "require-dev": {
     "ext-ctype": "*",
@@ -41,7 +41,7 @@
     "phpstan/phpstan-deprecation-rules": "^1.2.1",
     "phpstan/phpstan-phpunit": "^1.4.0",
     "phpunit/phpunit": "^10.5.26",
-    "rector/rector": "^1.2.8",
+    "rector/rector": "^1.2.9",
     "rector/type-perfect": "^1.0.0",
     "symplify/phpstan-rules": "^13.0.1",
     "tomasvotruba/cognitive-complexity": "^0.2.3",
