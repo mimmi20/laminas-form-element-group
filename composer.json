@@ -16,7 +16,7 @@
     "source": "https://github.com/mimmi20/laminas-form-element-group"
   },
   "require": {
-    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
     "laminas/laminas-form": "^3.21.0",
     "laminas/laminas-hydrator": "^4.16.0",
     "laminas/laminas-stdlib": "^3.20.0"
@@ -29,13 +29,13 @@
     "ext-tokenizer": "*",
     "ext-xml": "*",
     "ext-xmlwriter": "*",
-    "infection/infection": "^0.27.11 || ^0.28.1",
+    "infection/infection": "^0.29.8",
     "laminas/laminas-i18n": "^2.29.0",
     "laminas/laminas-inputfilter": "^2.30.1",
     "laminas/laminas-modulemanager": "^2.16.0",
     "laminas/laminas-validator": "^2.64.1",
     "mimmi20/coding-standard": "^5.2.44",
-    "nikic/php-parser": "^4.19.1 || ^5.0.2",
+    "nikic/php-parser": "^5.3.1",
     "phpstan/extension-installer": "^1.4.3",
     "phpstan/phpstan": "^1.12.9",
     "phpstan/phpstan-deprecation-rules": "^1.2.1",
@@ -43,6 +43,7 @@
     "phpunit/phpunit": "^10.5.26",
     "rector/rector": "^1.2.10",
     "rector/type-perfect": "^1.0.0",
+    "symfony/process": "^6.4.15",
     "symplify/phpstan-rules": "^13.0.1",
     "tomasvotruba/cognitive-complexity": "^0.2.3",
     "tomasvotruba/type-coverage": "^1.0.0",
