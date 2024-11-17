@@ -31,7 +31,7 @@
     "ext-xmlwriter": "*",
     "infection/infection": "^0.29.8",
     "laminas/laminas-i18n": "^2.29.0",
-    "laminas/laminas-inputfilter": "^2.30.1",
+    "laminas/laminas-inputfilter": "^2.31.0",
     "laminas/laminas-modulemanager": "^2.16.0",
     "laminas/laminas-validator": "^2.64.1",
     "mimmi20/coding-standard": "^5.2.44",
