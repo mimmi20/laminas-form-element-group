@@ -18,6 +18,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Hydrator\ClassMethodsHydrator;
 use Laminas\InputFilter\InputFilterProviderInterface;
 use Mimmi20\Form\Element\Group\ElementGroup;
+use Override;
 
 final class ProductFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -71,6 +72,7 @@ final class ProductFieldset extends Fieldset implements InputFilterProviderInter
      *
      * @throws void
      */
+    #[Override]
     public function getInputFilterSpecification(): array
     {
         return [
