@@ -22,6 +22,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Form\FormInterface;
 use Laminas\Stdlib\ArrayUtils;
+use Override;
 use Traversable;
 
 use function array_key_exists;
@@ -44,6 +45,7 @@ final class ElementGroup extends Collection
      * @throws InvalidArgumentException
      * @throws DomainException
      */
+    #[Override]
     public function prepareElement(FormInterface $form): void
     {
         $fieldCount = 0;
@@ -97,6 +99,7 @@ final class ElementGroup extends Collection
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Override]
     public function populateValues(iterable $data): void
     {
         if ($data instanceof Traversable) {
@@ -171,6 +174,7 @@ final class ElementGroup extends Collection
      *
      * @throws InvalidArgumentException
      */
+    #[Override]
     public function extract(): array
     {
         if (!is_array($this->object)) {

@@ -17,6 +17,7 @@ use Laminas\Form\Element;
 use Laminas\Form\Exception\InvalidArgumentException;
 use Laminas\Form\Fieldset;
 use Laminas\InputFilter\InputFilterProviderInterface;
+use Override;
 
 final class NestedFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -39,6 +40,7 @@ final class NestedFieldset extends Fieldset implements InputFilterProviderInterf
      *
      * @throws void
      */
+    #[Override]
     public function getInputFilterSpecification(): array
     {
         return [

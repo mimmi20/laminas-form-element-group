@@ -14,6 +14,7 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
 use Iterator;
+use Override;
 
 use function current;
 use function key;
@@ -34,12 +35,14 @@ final class CustomTraversable implements Iterator
     }
 
     /** @throws void */
+    #[Override]
     public function current(): mixed
     {
         return current($this->data);
     }
 
     /** @throws void */
+    #[Override]
     public function next(): void
     {
         next($this->data);
@@ -50,18 +53,21 @@ final class CustomTraversable implements Iterator
      *
      * @throws void
      */
+    #[Override]
     public function key(): mixed
     {
         return key($this->data);
     }
 
     /** @throws void */
+    #[Override]
     public function valid(): bool
     {
         return $this->key() !== null;
     }
 
     /** @throws void */
+    #[Override]
     public function rewind(): void
     {
         reset($this->data);

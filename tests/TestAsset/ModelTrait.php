@@ -42,34 +42,4 @@ trait ModelTrait
 
         throw new DomainException('Unknown attribute');
     }
-
-    /**
-     * @param array<string, mixed> $array
-     *
-     * @throws DomainException
-     */
-    public function exchangeArray(array $array): void
-    {
-        foreach ($array as $key => $value) {
-            if (!property_exists($this, $key)) {
-                continue;
-            }
-
-            $this->{$key} = $value;
-        }
-    }
-
-    /**
-     * @return array<string, mixed>
-     *
-     * @throws void
-     */
-    public function getArrayCopy(): array
-    {
-        return [
-            'bar' => $this->bar,
-            'foo' => $this->foo,
-            'foobar' => $this->foobar,
-        ];
-    }
 }

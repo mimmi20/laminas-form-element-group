@@ -13,6 +13,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20Test\Form\Element\Group\TestAsset;
 
+use DomainException;
+
+use function property_exists;
+
 final class ArrayModel
 {
     use ModelTrait;
@@ -27,5 +31,39 @@ final class ArrayModel
     public function toArray(): array
     {
         return $this->getArrayCopy();
+    }
+
+    /**
+     * @param array<string, mixed> $array
+     *
+     * @throws DomainException
+     *
+     * @api
+     */
+    public function exchangeArray(array $array): void
+    {
+        foreach ($array as $key => $value) {
+            if (!property_exists($this, $key)) {
+                continue;
+            }
+
+            $this->{$key} = $value;
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     *
+     * @throws void
+     *
+     * @api
+     */
+    public function getArrayCopy(): array
+    {
+        return [
+            'bar' => $this->bar,
+            'foo' => $this->foo,
+            'foobar' => $this->foobar,
+        ];
     }
 }
