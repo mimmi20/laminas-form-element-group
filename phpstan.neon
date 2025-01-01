@@ -16,15 +16,6 @@ parameters:
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
 
-  # reports occurrences of type-checking functions always evaluated to true
-  checkAlwaysTrueCheckTypeFunctionCall: true
-
-  # reports instanceof occurrences always evaluated to true
-  checkAlwaysTrueInstanceof: true
-
-  # reports === and !== occurrences always evaluated to true
-  checkAlwaysTrueStrictComparison: true
-
   # enable stricter analysis of benevolent union types
   checkBenevolentUnionTypes: true
 
@@ -45,9 +36,6 @@ parameters:
 
   # require that callable signatures are specified
   checkMissingCallableSignature: true
-
-  # checks for missing typehints in iterables
-  checkMissingIterableValueType: true
 
   # reports return typehints that could be narrowed down because some of the listed types are never returned
   checkTooWideReturnTypesInProtectedAndPublicMethods: true
@@ -126,16 +114,12 @@ parameters:
     - '~Parameter #1 \$elementOrFieldset of method Laminas\\Form\\Element\\Collection::setTargetElement\(\) expects array\|Laminas\\Form\\ElementInterface\|Traversable, null given~'
     - '~Parameter #1 \$(data|object) of method Laminas\\Form\\Element\\Collection::(populateValues|setObject)\(\) expects iterable, null given~'
     - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
-#    - '~is not subtype of Throwable~'
-    - '~Call to static method PHPUnit\\Framework\\Assert::assert.*\(\) with .* will always evaluate to true~'
-#    - '~is used in multiple traits. Make it unique to avoid conflicts~'
     - '~Access to private property Mimmi20Test\\Form\\Element\\Group\\TestAsset\\ArrayModel::~'
     - '~Use explicit methods over array access on object~'
 
 rules:
   # code complexity
   # - Symplify\PHPStanRules\Rules\NoDynamicNameRule
-  # - Symplify\PHPStanRules\Rules\NoReturnArrayVariableListRule # todo: fix
 
   - Symplify\PHPStanRules\Rules\ForbiddenExtendOfNonAbstractClassRule
 
@@ -157,14 +141,8 @@ rules:
   # naming
   - Symplify\PHPStanRules\Rules\RequireAttributeNameRule
 
-  # regexes
-  - Symplify\PHPStanRules\Rules\AnnotateRegexClassConstWithRegexLinkRule
-  - Symplify\PHPStanRules\Rules\NoInlineStringRegexRule
-  - Symplify\PHPStanRules\Rules\RegexSuffixInRegexConstantRule
-
   # naming
   - Symplify\PHPStanRules\Rules\Explicit\ExplicitClassPrefixSuffixRule
   # - Symplify\PHPStanRules\Rules\NoReturnSetterMethodRule
   - Symplify\PHPStanRules\Rules\UppercaseConstantRule
   - Symplify\PHPStanRules\Rules\ClassNameRespectsParentSuffixRule
-  - Symplify\PHPStanRules\Rules\CheckClassNamespaceFollowPsr4Rule
