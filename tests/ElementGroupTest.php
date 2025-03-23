@@ -43,6 +43,7 @@ use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection;
 use Mimmi20Test\Form\Element\Group\TestAsset\FormCollection2;
 use Mimmi20Test\Form\Element\Group\TestAsset\PhoneFieldset;
 use Mimmi20Test\Form\Element\Group\TestAsset\ProductFieldset;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -1061,6 +1062,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractThroughCustomHydrator(): void
@@ -1313,6 +1316,8 @@ final class ElementGroupTest extends TestCase
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \DomainException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughCollectionHydrator(): void
@@ -1353,6 +1358,8 @@ final class ElementGroupTest extends TestCase
      * @throws InvalidArgumentException
      * @throws DomainException
      * @throws \DomainException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractFromTraversableImplementingToArrayThroughTargetElementHydrator(): void
@@ -1403,6 +1410,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject2(): void
@@ -1439,6 +1448,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject3(): void
@@ -1489,6 +1500,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject4(): void
@@ -1538,6 +1551,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject5(): void
@@ -1587,6 +1602,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testExtractMaintainsTargetElementObject6(): void
@@ -1636,6 +1653,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets2(): void
@@ -1680,6 +1699,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets3(): void
@@ -1729,6 +1750,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets4(): void
@@ -1791,6 +1814,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets5(): void
@@ -1852,6 +1877,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets6(): void
@@ -1913,6 +1940,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('test-extract')]
     public function testCollectionCanBindObjectAndPopulateAndExtractNestedFieldsets7(): void
@@ -3424,6 +3453,8 @@ final class ElementGroupTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Group('issue-6263')]
     #[Group('issue-6518')]
@@ -3601,6 +3632,7 @@ final class ElementGroupTest extends TestCase
     }
 
     /**
+     * @throws Exception
      * @throws DomainException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      * @throws InvalidArgumentException

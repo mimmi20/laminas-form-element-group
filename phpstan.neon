@@ -116,6 +116,7 @@ parameters:
     - '~Cannot call method (toArray|getValue|get)\(\) on mixed~'
     - '~Access to private property Mimmi20Test\\Form\\Element\\Group\\TestAsset\\ArrayModel::~'
     - '~Use explicit methods over array access on object~'
+    - '~will always evaluate to true~'
 
 rules:
   # code complexity
